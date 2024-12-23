@@ -35,4 +35,9 @@ public class UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
+
+    // Método para encontrar un usuario por nickname
+    public Optional<User> findUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname);
+    }
 }
