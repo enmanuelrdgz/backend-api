@@ -25,8 +25,8 @@ import static javax.crypto.Cipher.SECRET_KEY;
 @RequestMapping("/api/user")
 public class UserController {
 
-    private SecretKey claveSecreta = Keys.secretKeyFor(SignatureAlgorithm.HS512);
     private final UserService userService;
+    private AuthController authController;
 
     @Autowired
     public UserController(UserService userService) {
@@ -65,32 +65,21 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Void> createUser(@RequestBody User user) {
         User savedUser = userService.saveUser(user);
-        String jwt = Jwts.builder().setSubject(savedUser.getNickname()).setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + 3600000)).signWith(SignatureAlgorithm.HS512, claveSecreta).compact();
+        String token = authController.authenticate(savedUser);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Set-Cookie", "jwt=" + jwt + "; HttpOnly; Path=/; Max-Age=604800");
-
+        headers.add("Set-Cookie", "jwt=" + token + "; HttpOnly; Path=/; Max-Age=604800");
         return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
     }
 
     // Endpoint to delete a user by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
-        //chequear que se ha enviado el jwt
         if(authorizationHeader != null) {
-            // Extraer el token JWT (eliminar el prefijo "Bearer ")
-            String jwt = authorizationHeader.substring(7); // El prefijo "Bearer " tiene 7 caracteres
-            // Verifica y extrae las claims del JWT usando la private key
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(claveSecreta)  // Aquí se pasa la clave secreta en bytes
-                    .build()
-                    .parseClaimsJws(jwt)
-                    .getBody();
-            String nickname = claims.getSubject();
-
+            // Extraer el token
+            String token = authorizationHeader.substring(7);
             Optional<User> user = userService.findUserById(id);
             if (user.isPresent()) {
-                if (user.get().getNickname().equals(nickname)) {
-                    userService.deleteUserById(id);
+                if (authController.isAuthenticated(user.get(), token)) {
                     return ResponseEntity.noContent().build();
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -101,6 +90,5 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-
     }
 }
