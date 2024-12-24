@@ -29,8 +29,9 @@ public class UserController {
     private AuthController authController;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthController authController) {
         this.userService = userService;
+        this.authController = authController;
     }
 
     // Endpoint to get all users
@@ -64,22 +65,28 @@ public class UserController {
     // Endpoint to create a new user
     @PostMapping
     public ResponseEntity<Void> createUser(@RequestBody User user) {
-        User savedUser = userService.saveUser(user);
-        String token = authController.authenticate(savedUser);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Set-Cookie", "jwt=" + token + "; HttpOnly; Path=/; Max-Age=604800");
-        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
+        Optional<User> userAlreadyExist = userService.findUserByNickname(user.getNickname());
+        if(userAlreadyExist.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } else {
+            User savedUser = userService.saveUser(user);
+            String token = authController.authenticate(savedUser);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Set-Cookie", "jwt=" + token + "; HttpOnly; Path=/; Max-Age=604800");
+            return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
+        }
     }
 
     // Endpoint to delete a user by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
         if(authorizationHeader != null) {
             // Extraer el token
             String token = authorizationHeader.substring(7);
             Optional<User> user = userService.findUserById(id);
             if (user.isPresent()) {
                 if (authController.isAuthenticated(user.get(), token)) {
+                    userService.deleteUserById(id);
                     return ResponseEntity.noContent().build();
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
