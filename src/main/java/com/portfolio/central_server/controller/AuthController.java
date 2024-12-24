@@ -35,6 +35,7 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<Void> login(@RequestBody LoginRequestDTO body) {
         Optional<User> user = userService.findUserByNickname(body.getNickname());
+
         if (user.isPresent()) {
             if (user.get().getPassword().equals(body.getPassword())) {
                 // Fecha actual
@@ -63,17 +64,22 @@ public class AuthController {
     }
 
     public boolean isAuthenticated(User user, String token) {
-            Claims claims = Jwts.parserBuilder()
-                    .setSigningKey(secretKey)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-            String nickname = claims.getSubject();
-            if (user.getNickname().equals(nickname)) {
-                return true;
-            } else {
+            try {
+                Claims claims = Jwts.parserBuilder()
+                        .setSigningKey(secretKey)
+                        .build()
+                        .parseClaimsJws(token)
+                        .getBody();
+                String nickname = claims.getSubject();
+                if (user.getNickname().equals(nickname)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
                 return false;
             }
+
     }
 
     public String authenticate(User user) {
@@ -92,5 +98,14 @@ public class AuthController {
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
+    }
+
+    public String getNicknameFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject();
     }
 }
