@@ -85,17 +85,22 @@ public class UserController {
             String token = authorizationHeader.substring(7);
             Optional<User> user = userService.findUserById(id);
             if (user.isPresent()) {
-                if (authController.isAuthenticated(user.get(), token)) {
-                    userService.deleteUserById(id);
-                    return ResponseEntity.noContent().build();
-                } else {
+                try {
+                    String nickname = authController.getNicknameFromToken(token);
+                    if(user.get().getNickname().equals(nickname)) {
+                        userService.deleteUserById(id);
+                        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+                    } else {
+                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                    }
+                } catch (Exception e) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                 }
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }
