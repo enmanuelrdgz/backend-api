@@ -32,7 +32,12 @@ public class SurveyController {
     // Endpoint to get all surveys
     @GetMapping
     public ResponseEntity<List<SurveyDTO>> getAllSurveys() {
-        List<Survey> surveyList = surveyService.findAllSurveys();
+        List<Survey> surveyList;
+        try {
+            surveyList = surveyService.findAllSurveys();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
         List<SurveyDTO> surveyDTOList = new ArrayList<SurveyDTO>();
         for(Survey s : surveyList) {
             SurveyDTO newSurveyDTO = new SurveyDTO();
@@ -49,11 +54,7 @@ public class SurveyController {
             newSurveyDTO.setOptions(options);
             surveyDTOList.add(newSurveyDTO);
         }
-        if(surveyDTOList.size() > 0) {
             return ResponseEntity.ok(surveyDTOList);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
     }
 
     // Endpoint to get a single survey
