@@ -83,12 +83,23 @@ public class SurveyController {
     @PostMapping
     public ResponseEntity<Void> createSurvey(@RequestBody CreateSurveyRequestDTO body, @RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.substring(7);
-        String nickname = authController.getNicknameFromToken(token);
+        String nickname;
+        try {
+            nickname = authController.getNicknameFromToken(token);
+            if(!nickname.equals(body.getUser())) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         Optional<User> user = userService.findUserByNickname(nickname);
+        if(!user.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         Survey newSurvey = new Survey();
         newSurvey.setTitle(body.getTitle());
         List<Option> options = new ArrayList<Option>();
-        if(body.getOptions().size() == 0){
+        if(body.getOptions().isEmpty()){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         } else {
             for(String name : body.getOptions()) {
