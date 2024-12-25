@@ -24,7 +24,6 @@ This is an API for a survey system implemented in Java. The API allows users to 
 - `POST api/survey` - Create a new survey.
 - `GET api/survey` - Retrieve a list of all surveys.
 - `GET api/survey/{id}` - Get details of a specific survey by ID.
-- `PUT api/survey/{id}` - Update a survey by ID.
 - `DELETE api/survey/{id}` - Delete a survey by ID.
 
 ### User Endpoints
@@ -32,7 +31,6 @@ This is an API for a survey system implemented in Java. The API allows users to 
 - `POST api/user` - Register a new user into the system.
 - `GET api/user` - Retrieve a list of all users.
 - `GET api/user/{id}` - Get details of a specific user by ID.
-- `PUT api/user/{id}` - Update a user by ID.
 - `DELETE api/user/{id}` - Delete a user by ID.
 
 ### Authentication
