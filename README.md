@@ -30,14 +30,14 @@ This is an API for a survey system implemented in Java. The API allows users to 
 ### User Endpoints
 
 - `POST api/user` - Register a new user into the system.
-- `GET api/user` - Retrieve all a list of all users.
+- `GET api/user` - Retrieve a list of all users.
 - `GET api/user/{id}` - Get details of a specific user by ID.
 - `PUT api/user/{id}` - Update a user by ID.
 - `DELETE api/user/{id}` - Delete a user by ID.
 
 ### Authentication
 
-- `POST /auth/login` - Log in and receive a JWT token for authenticated access.
+- `POST /auth/` - Log in and receive a JWT token for authenticated access.
 
 ## Installation
 
