@@ -1,6 +1,4 @@
-package com.portfolio.central_server.DTO;
-
-import java.util.List;
+package com.portfolio.central_server.dto;
 
 public class UserDTO {
     private Long id;
