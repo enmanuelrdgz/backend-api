@@ -1,8 +1,8 @@
 package com.portfolio.central_server.controller;
 
-import com.portfolio.central_server.DTO.CreateSurveyRequestDTO;
-import com.portfolio.central_server.DTO.OptionDTO;
-import com.portfolio.central_server.DTO.SurveyDTO;
+import com.portfolio.central_server.dto.CreateSurveyRequestDTO;
+import com.portfolio.central_server.dto.OptionDTO;
+import com.portfolio.central_server.dto.SurveyDTO;
 import com.portfolio.central_server.model.*;
 import com.portfolio.central_server.service.SurveyService;
 import com.portfolio.central_server.service.UserService;

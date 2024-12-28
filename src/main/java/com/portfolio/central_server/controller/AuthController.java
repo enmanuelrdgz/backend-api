@@ -1,13 +1,11 @@
 package com.portfolio.central_server.controller;
 
-import com.portfolio.central_server.DTO.LoginRequestDTO;
+import com.portfolio.central_server.dto.LoginRequestDTO;
 import com.portfolio.central_server.model.User;
 import com.portfolio.central_server.service.*;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

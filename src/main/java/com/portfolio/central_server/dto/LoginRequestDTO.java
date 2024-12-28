@@ -1,4 +1,4 @@
-package com.portfolio.central_server.DTO;
+package com.portfolio.central_server.dto;
 
 public class LoginRequestDTO {
     private String nickname;

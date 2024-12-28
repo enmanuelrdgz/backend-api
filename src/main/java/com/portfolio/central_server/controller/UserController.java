@@ -1,25 +1,14 @@
 package com.portfolio.central_server.controller;
 
-import com.portfolio.central_server.DTO.UserDTO;
-import com.portfolio.central_server.model.Survey;
+import com.portfolio.central_server.dto.UserDTO;
 import com.portfolio.central_server.model.User;
 import com.portfolio.central_server.service.UserService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import io.jsonwebtoken.security.Keys;
-
-import javax.crypto.SecretKey;
-import java.time.LocalDate;
 import java.util.*;
-
-import static javax.crypto.Cipher.SECRET_KEY;
 
 @RestController
 @RequestMapping("/api/user")
