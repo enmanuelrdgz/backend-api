@@ -1,304 +1,229 @@
-# CREATE USER
+# OPERATION: CREATE USER
+
+**Endpoint**:  
+`POST /api/user`
 
 **Description**:  
-Create a new user. It doesn't need to be logged in.
+This endpoint allows creating a new user in the system. Upon receiving the required data, a user will be registered and information about the created resource will be returned.
 
----
+## Requirements
 
-### REQUEST
-
-**Method**:  
-`POST`  
-
-**Url**:  
-`/api/user`
-
-**Url Parameters**:  
-No
+**Headers**
++ `Content-Type: application/json`
 
 **Body**:  
+The body of the request must be sent in JSON format with the following fields:  
+
+|field   |type  |required|description  |
+|--------|------|--------|-------------|
+|nickname|string|yes     |user nickname|
+|password|string|yes     |user password|
+
+**Example Request Body**
 ```json
-  {
-    "nickname": "example_nickname",
-    "password": "12356789"
-  }
+{
+  "nickname": "john_doe",
+  "password": "securepassword123"
+}
 ```
 
-**Requires to be logged**:  
-No
+## Responses
 
----
+**Success (201 Created)**  
+When the user is successfully created, the server returns:  
++ Status Code: `201 Created`
++ Headers: 
+  + `Location`: URI of the created resource (e.g., /api/user/123)
++ Body: User information in JSON format.  
 
-### RESPONSE
+**Example Response Body**  
 
-**Status Code**:  
-`201 CREATED`  
-
-**Body**:  
-No
-
-**Cookies**:  
-+ jwt
-
-# GET USER
-
-**Description**:  
-Get a user by ID. It doesn't need to be logged in.
-
----
-
-### REQUEST
-
-**Method**:  
-`GET`  
-
-**Url**:  
-`/api/user/{id}`
-
-**Url Parameters**:  
-+ **id**: id of the user to be retrived.
-
-**Body**:  
-No
-
-**Requires to be logged**:  
-No
-
----
-
-### RESPONSE
-
-**Status Code**:  
-`200 OK`  
-
-**Body**:  
 ```json
-  {
-    "id": 1,
-    "nickname": "user1"
-  }
+{
+  "id": 123,
+  "nickname": "john_doe",
+  "createdAt": "2024-12-29T12:00:00Z"
+}
 ```
 
-**Cookies**:  
-No
+**Errors**  
+|Status Code              |Description                                                 |
+|-------------------------|------------------------------------------------------------|
+|400 Bad Request          |Required fields are missing or the request format is invalid|
+|409 Conflict             |A user with the same email already exists                   |
+|500 Internal Server Error|An unexpected error occurred on the server                  |
 
-# GET ALL USERS
+**Example Error Response Body (409 Conflict)**  
+```json
+{
+  "error": "Email is already in use."
+}
+```  
+  
+
+# OPERATION: GET USER
+
+**Endpoint**:  
+`GET /api/user/{id}`  
 
 **Description**:  
-Get all users. It doesn't need to be logged in.
+Retrieves detailed information about a specific user based on their unique identifier (`id`).
 
----
+## Requirements
 
-### REQUEST
+**Path parameters**:  
++ `id`: The unique identifier of the user to retrieve.  
 
-**Method**:  
-`GET`  
+**Headers**:  
++ `Authorization`: The endpoint requires an authorization token to ensure secure access.  
++ `Content-Type: application/json`
 
-**Url**:  
-`/api/user`
 
-**Url Parameters**:  
-no
+**Example Request**
+```
+GET /api/user/123 HTTP/1.1
+Authorization: Bearer {token}
+```
 
-**Body**:  
-No
+## Responses
 
-**Requires to be logged**:  
-No
+**Success (200 OK)**  
+Returns the details of the user in JSON format.  
 
----
-
-### RESPONSE
-
-**Status Code**:  
-`200 OK`  
-
-**Body**:  
+**Example Response Body**  
 ```json
-[
+{
+  "id": 123,
+  "nickname": "john_doe",
+  "createdAt": "2024-12-29T12:00:00Z",
+}
+```
+
+**Errors**  
+|Status Code              |Description                                                 |
+|-------------------------|------------------------------------------------------------|
+|400 Bad Request          |Returned if the id is not a valid format|
+|404 Not Found             |Returned if a user with the specified id does not exist                   |
+
+# OPERATION: CREATE SURVEY
+
+**Endpoint**:  
+`POST /api/survey`
+
+**Description**:  
+This endpoint allows authenticated users to create a new survey.
+
+## Requirements
+
+**Headers**
++ `Content-Type: application/json`  
++ `Authorization`: The endpoint requires an authorization token to ensure the user is logged in.
+
+**Body**:  
+The body of the request must be sent in JSON format with the following fields:  
+
+|field   |type  |required|description  |
+|--------|------|--------|-------------|
+|title|string|yes     |survey title|
+|options|array|yes     |an array of options for the survey|
+|options[].name|string|yes     |the name of a survey option|
+
+**Example Request Body**
+```json
   {
+  "title": "Favorite Programming Language",
+  "options": [
+    { "name": "Python" },
+    { "name": "JavaScript" },
+    { "name": "C++" }
+  ]
+}
+```
+
+## Responses
+
+**Success (201 Created)**  
+When the survey is successfully created, the server returns:  
++ Status Code: `201 Created`
++ Headers: 
+  + `Location`: URI of the created resource (e.g., /api/survey/123)
++ Body: Survey information in JSON format.  
+
+**Example Response Body**  
+
+```json
+{
+  "id": 123,
+  "title": "Favorite Programming Language",
+  "creator": {
     "id": 1,
-    "nickname": "user1"
+    "nickname": "john_doe"
   },
-  {
-    "id": 2,
-    "nickname": "user2"
-  }
-]
-```
-
-**Cookies**:  
-No
-
-# CREATE SURVEY
-
-**Description**:  
-Create a new survey. You must be loged in to create a survey.
-
----
-
-### REQUEST
-
-**Method**:  
-`POST`  
-
-**Url**:  
-`/api/survey`
-
-**Url Parameters**:  
-No
-
-**Body**:  
-```json
-{
-  "title": "example title",
   "options": [
-    "option 1",
-    "option 2"
-  ]
+    { "id": 1, "name": "Python", "votes": 0 },
+    { "id": 2, "name": "JavaScript", "votes": 0 },
+    { "id": 3, "name": "C++", "votes": 0 }
+  ],
+  "created_at": "2024-12-29T12:00:00Z"
 }
 ```
 
-**Requires to be logged**: Yes
+**Errors**  
+|Status Code              |Description                                                 |
+|-------------------------|------------------------------------------------------------|
+|400 Bad Request          |Required fields are missing or the request format is invalid|
+|401 Unathorized             |Authentication token is missing or invalid.                   |
+|500 Internal Server Error|An unexpected error occurred on the server                  |
 
----
+# OPERATION: GET SURVEY
 
-### RESPONSE
-
-**Status Code**:  
-`201 CREATED`  
-
-**Body**:  
-No  
-
-**Cookies**:  
-No
-
-# GET SURVEY
+**Endpoint**:  
+`GET /api/survey/{id}`  
 
 **Description**:  
-Get a survey by its ID. It does not require authentication, everyone can see every survey
+Retrieves detailed information about a specific survey based on their unique identifier (`id`).
 
----
+## Requirements
 
-### REQUEST
+**Path parameters**:  
++ `id`: The unique identifier of the survey to retrieve.  
 
-**Method**:  
-`GET`  
+**Headers**:  
++ `Authorization`: The endpoint requires an authorization token to ensure secure access.  
++ `Content-Type: application/json`
 
-**Url**:  
-`/api/survey/{id}`
 
-**Url Parameters**:  
-+ **id**: id of the survey that is going to be retrived.
+**Example Request**
+```
+GET /api/survey/123 HTTP/1.1
+Authorization: Bearer {token}
+```
 
-**Body**:  
-No
+## Responses
 
-**Requires Authentication**: No
+**Success (200 OK)**  
+Returns the details of the survey in JSON format.  
 
----
-
-### RESPONSE
-
-**Status Code**:  
-`200 OK`  
-
-**Body**:  
+**Example Response Body**  
 ```json
 {
-  "id": 1,
-  "user": "jhon_doe",
-  "title": "example title",
+  "id": 123,
+  "title": "Favorite Programming Language",
+  "creator": {
+    "id": 1,
+    "nickname": "john_doe"
+  },
   "options": [
-    {
-      "name": "option 1",
-      "votes": 25
-    },
-    {
-      "name": "option 2",
-      "votes": 30
-    }
-  ]
+    { "id": 1, "name": "Python", "votes": 5 },
+    { "id": 2, "name": "JavaScript", "votes": 3 }
+  ],
+  "created_at": "2024-12-29T12:00:00Z"
 }
+
 ```
 
-**Cookies**:  
-No
-
-# DELETE SURVEY
-
-**Description**:  
-Delete a survey by its id. Only the user that created the survey is authorized to delete it.
-
----
-
-### REQUEST
-
-**Method**:  
-`DELETE`  
-
-**Url**:  
-`/api/survey/{id}`
-
-**Url Parameters**:  
-+ **id**: id of the survey that is going to be deleted.
-
-**Body**:  
-No
-
-**Requires Authentication**: Yes
-
----
-
-### RESPONSE
-
-**Status Code**:  
-`NO CONTENT`  
-
-**Body**:  
-No  
-
-**Cookies**:  
-No
-
-# LOG IN
-
-**Description**:  
-Log in into the system.
-
----
-
-### REQUEST
-
-**Method**:  
-`POST`  
-
-**Url**:  
-`/api/auth`
-
-**Url Parameters**:  
-No
-
-**Body**:  
-```json
-{
-  "nickname": "example_nickname",
-  "password": "123456789"
-}
-```
-
-**Requires Authentication**: No
-
----
-
-### RESPONSE
-
-**Status Code**:  
-`200 OK`  
-
-**Body**:  
-No  
-
-**Cookies**:  
-+ jwt
+**Errors**  
+|Status Code              |Description                                                 |
+|-------------------------|------------------------------------------------------------|
+|400 Bad Request          |Returned if the id is not a valid format|
+|404 Not Found             |Returned if a survey with the specified id does not exist                   |
