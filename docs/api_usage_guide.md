@@ -227,3 +227,54 @@ Returns the details of the survey in JSON format.
 |-------------------------|------------------------------------------------------------|
 |400 Bad Request          |Returned if the id is not a valid format|
 |404 Not Found             |Returned if a survey with the specified id does not exist                   |
+
+# OPERATION: LOG IN
+
+**Endpoint**:  
+`POST /api/auth`
+
+**Description**:  
+This endpoint allows users to log in by providing their nickname and password. Upon successful authentication, the server returns an access token that can be used for subsequent API requests requiring authentication.
+
+## Requirements
+
+**Headers**
++ `Content-Type: application/json`
+
+**Body**:  
+The body of the request must be sent in JSON format with the following fields:  
+
+|field   |type  |required|description  |
+|--------|------|--------|-------------|
+|nickname|string|yes     |user nickname|
+|password|string|yes     |user password|
+
+**Example Request Body**
+```json
+{
+  "nickname": "john_doe",
+  "password": "securepassword123"
+}
+```
+
+## Responses
+
+**Success (200 OK)**  
+The user was successfully authenticated.
++ Status Code: `200 OK`
++ Headers: 
+  + `Set-Cookie`: A cookie containing the JWT
+  
+**JWT Cookie**:  
++ Name: `auth_token`  
++ Path: `/`  
++ HttpOnly: `true`  
++ SameSite: `Strict`  
+
+**Errors**  
+|Status Code              |Description                                                 |
+|-------------------------|------------------------------------------------------------|
+|401 Unauthorized          |Invalid nickname or password.|
+|400 Bad Request           |Missing or Invalid Input                   |
+|500 Internal Server Error|An unexpected error occurred on the server                  |
+ 
