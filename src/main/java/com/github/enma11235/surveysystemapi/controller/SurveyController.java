@@ -1,11 +1,14 @@
-package com.portfolio.central_server.controller;
+package com.github.enma11235.surveysystemapi.controller;
 
-import com.portfolio.central_server.dto.CreateSurveyRequestDTO;
-import com.portfolio.central_server.dto.OptionDTO;
-import com.portfolio.central_server.dto.SurveyDTO;
-import com.portfolio.central_server.model.*;
-import com.portfolio.central_server.service.SurveyService;
-import com.portfolio.central_server.service.UserService;
+import com.github.enma11235.surveysystemapi.dto.CreateSurveyRequestDTO;
+import com.github.enma11235.surveysystemapi.dto.OptionDTO;
+import com.github.enma11235.surveysystemapi.dto.SurveyDTO;
+import com.github.enma11235.surveysystemapi.model.Option;
+import com.github.enma11235.surveysystemapi.model.Survey;
+import com.github.enma11235.surveysystemapi.model.User;
+import com.github.enma11235.surveysystemapi.model.*;
+import com.github.enma11235.surveysystemapi.service.SurveyService;
+import com.github.enma11235.surveysystemapi.service.UserService;
 import jakarta.persistence.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.portfolio.central_server.dto;
+package com.github.enma11235.surveysystemapi.dto;
 
 public class OptionDTO {
     private String name;

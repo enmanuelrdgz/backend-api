@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.github.enma11235</groupId>
-	<artifactId>surveyapp-backend</artifactId>
+	<artifactId>survey-system-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>backend</name>
-	<description>API para mi aplicacion de encuestas</description>
+	<name>survey-system-api</name>
+	<description>API for the survey system</description>
 	<url/>
 	<licenses>
 		<license/>

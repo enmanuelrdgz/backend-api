@@ -1,8 +1,8 @@
-package com.portfolio.central_server.controller;
+package com.github.enma11235.surveysystemapi.controller;
 
-import com.portfolio.central_server.dto.UserDTO;
-import com.portfolio.central_server.model.User;
-import com.portfolio.central_server.service.UserService;
+import com.github.enma11235.surveysystemapi.dto.UserDTO;
+import com.github.enma11235.surveysystemapi.model.User;
+import com.github.enma11235.surveysystemapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
