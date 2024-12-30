@@ -1,8 +1,9 @@
-package com.portfolio.central_server.controller;
+package com.github.enma11235.surveysystemapi.controller;
 
-import com.portfolio.central_server.dto.LoginRequestDTO;
-import com.portfolio.central_server.model.User;
-import com.portfolio.central_server.service.*;
+import com.github.enma11235.surveysystemapi.dto.LoginRequestDTO;
+import com.github.enma11235.surveysystemapi.model.User;
+import com.github.enma11235.surveysystemapi.service.UserService;
+import com.github.enma11235.surveysystemapi.service.*;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

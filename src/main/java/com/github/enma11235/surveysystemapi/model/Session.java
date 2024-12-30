@@ -1,4 +1,4 @@
-package com.portfolio.central_server.model;
+package com.github.enma11235.surveysystemapi.model;
 
 import jakarta.persistence.*;
 

@@ -1,4 +1,4 @@
-package com.portfolio.central_server;
+package com.github.enma11235.surveysystemapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,6 +1,6 @@
-package com.portfolio.central_server.repository;
+package com.github.enma11235.surveysystemapi.repository;
 
-import com.portfolio.central_server.model.User;
+import com.github.enma11235.surveysystemapi.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

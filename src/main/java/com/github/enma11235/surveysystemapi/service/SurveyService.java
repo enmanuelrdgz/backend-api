@@ -1,10 +1,9 @@
-package com.portfolio.central_server.service;
+package com.github.enma11235.surveysystemapi.service;
 
-import com.portfolio.central_server.model.Survey;
+import com.github.enma11235.surveysystemapi.model.Survey;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.portfolio.central_server.repository.SurveyRepository;
+import com.github.enma11235.surveysystemapi.repository.SurveyRepository;
 
 import java.util.List;
 import java.util.Optional;

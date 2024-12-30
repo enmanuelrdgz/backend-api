@@ -1,4 +1,4 @@
-package com.portfolio.central_server.configuration;
+package com.github.enma11235.surveysystemapi.configuration;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
