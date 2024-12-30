@@ -1,4 +1,4 @@
-package com.github.enma11235.surveysystemapi.dto;
+package com.github.enma11235.surveysystemapi.dto.request;
 
 public class LoginRequestDTO {
     private String nickname;

@@ -1,12 +1,11 @@
 package com.github.enma11235.surveysystemapi.controller;
 
-import com.github.enma11235.surveysystemapi.dto.CreateSurveyRequestDTO;
+import com.github.enma11235.surveysystemapi.dto.request.CreateSurveyRequestDTO;
 import com.github.enma11235.surveysystemapi.dto.OptionDTO;
 import com.github.enma11235.surveysystemapi.dto.SurveyDTO;
 import com.github.enma11235.surveysystemapi.model.Option;
 import com.github.enma11235.surveysystemapi.model.Survey;
 import com.github.enma11235.surveysystemapi.model.User;
-import com.github.enma11235.surveysystemapi.model.*;
 import com.github.enma11235.surveysystemapi.service.SurveyService;
 import com.github.enma11235.surveysystemapi.service.UserService;
 import jakarta.persistence.PersistenceException;

@@ -1,8 +1,11 @@
 package com.github.enma11235.surveysystemapi.controller;
 
-import com.github.enma11235.surveysystemapi.dto.UserDTO;
+import com.github.enma11235.surveysystemapi.dto.*;
+import com.github.enma11235.surveysystemapi.dto.request.CreateUserRequestBody;
+import com.github.enma11235.surveysystemapi.dto.response.CreateUserResponseBody;
 import com.github.enma11235.surveysystemapi.model.User;
 import com.github.enma11235.surveysystemapi.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
@@ -51,19 +54,11 @@ public class UserController {
         }
     }
 
-    // Endpoint to create a new user
+    // CREATE USER
     @PostMapping
-    public ResponseEntity<Void> createUser(@RequestBody User user) {
-        Optional<User> userAlreadyExist = userService.findUserByNickname(user.getNickname());
-        if(userAlreadyExist.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        } else {
-            User savedUser = userService.saveUser(user);
-            String token = authController.authenticate(savedUser);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Set-Cookie", "jwt=" + token + "; HttpOnly; Path=/; Max-Age=604800");
-            return ResponseEntity.status(HttpStatus.CREATED).headers(headers).build();
-        }
+    public ResponseEntity<CreateUserResponseBody> createUser(@RequestBody @Valid CreateUserRequestBody body) {
+        CreateUserResponseBody response = userService.createUser(body.getNickname(), body.getPassword());
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Endpoint to delete a user by ID
