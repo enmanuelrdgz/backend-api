@@ -1,6 +1,6 @@
 package com.github.enma11235.surveysystemapi.controller;
 
-import com.github.enma11235.surveysystemapi.exception.NicknameAlreadyInUseException;
+import com.github.enma11235.surveysystemapi.exception.AuthException;
 import com.github.enma11235.surveysystemapi.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NicknameAlreadyInUseException.class)
-    public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(NicknameAlreadyInUseException ex) {
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(AuthException ex) {
         ErrorResponse errorResponse = new ErrorResponse("NICKNAME_ALREADY_IN_USE", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
