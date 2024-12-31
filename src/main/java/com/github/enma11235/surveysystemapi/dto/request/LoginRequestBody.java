@@ -1,6 +1,6 @@
 package com.github.enma11235.surveysystemapi.dto.request;
 
-public class LoginRequestDTO {
+public class LoginRequestBody {
     private String nickname;
     private String password;
 

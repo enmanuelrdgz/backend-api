@@ -82,33 +82,33 @@ public class SurveyController {
     }
 
     // Endpoint to create a new survey
-    @PostMapping
-    public ResponseEntity<Void> createSurvey(@RequestBody CreateSurveyRequestDTO body, @RequestHeader("Authorization") String authorizationHeader) {
-        String token = authorizationHeader.substring(7);
-        String nickname = authController.getNicknameFromToken(token);
-        Optional<User> user = userService.findUserByNickname(nickname);
-        Survey newSurvey = new Survey();
-        newSurvey.setTitle(body.getTitle());
-        List<Option> options = new ArrayList<Option>();
-        if(body.getOptions().size() == 0){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        } else {
-            for(String name : body.getOptions()) {
-                Option newOption = new Option();
-                newOption.setSurvey(newSurvey);
-                newOption.setName(name);
-                options.add(newOption);
-            }
-            newSurvey.setOptions(options);
-            newSurvey.setUser(user.get());
-            try {
-                surveyService.saveSurvey(newSurvey);
-                return ResponseEntity.status(HttpStatus.CREATED).build();
-            } catch (PersistenceException e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-        }
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> createSurvey(@RequestBody CreateSurveyRequestDTO body, @RequestHeader("Authorization") String authorizationHeader) {
+//        String token = authorizationHeader.substring(7);
+//        String nickname = authController.getNicknameFromToken(token);
+//        Optional<User> user = userService.findUserByNickname(nickname);
+//        Survey newSurvey = new Survey();
+//        newSurvey.setTitle(body.getTitle());
+//        List<Option> options = new ArrayList<Option>();
+//        if(body.getOptions().size() == 0){
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        } else {
+//            for(String name : body.getOptions()) {
+//                Option newOption = new Option();
+//                newOption.setSurvey(newSurvey);
+//                newOption.setName(name);
+//                options.add(newOption);
+//            }
+//            newSurvey.setOptions(options);
+//            newSurvey.setUser(user.get());
+//            try {
+//                surveyService.saveSurvey(newSurvey);
+//                return ResponseEntity.status(HttpStatus.CREATED).build();
+//            } catch (PersistenceException e) {
+//                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//            }
+//        }
+//    }
 
     // Endpoint to delete a survey by ID
     @DeleteMapping("/{id}")

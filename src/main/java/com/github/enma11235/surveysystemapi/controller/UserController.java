@@ -62,29 +62,29 @@ public class UserController {
     }
 
     // Endpoint to delete a user by ID
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
-        if(authorizationHeader != null) {
-            // Extraer el token
-            String token = authorizationHeader.substring(7);
-            Optional<User> user = userService.findUserById(id);
-            if (user.isPresent()) {
-                try {
-                    String nickname = authController.getNicknameFromToken(token);
-                    if(user.get().getNickname().equals(nickname)) {
-                        userService.deleteUserById(id);
-                        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-                    } else {
-                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-                    }
-                } catch (Exception e) {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<String> deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+//        if(authorizationHeader != null) {
+//            // Extraer el token
+//            String token = authorizationHeader.substring(7);
+//            Optional<User> user = userService.findUserById(id);
+//            if (user.isPresent()) {
+//                try {
+//                    String nickname = authController.getNicknameFromToken(token);
+//                    if(user.get().getNickname().equals(nickname)) {
+//                        userService.deleteUserById(id);
+//                        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//                    } else {
+//                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//                    }
+//                } catch (Exception e) {
+//                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//                }
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//            }
+//        } else {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
 }

@@ -1,7 +1,8 @@
 package com.github.enma11235.surveysystemapi.service;
 
-import com.github.enma11235.surveysystemapi.exception.NicknameAlreadyInUseException;
+import com.github.enma11235.surveysystemapi.exception.AuthException;
 import com.github.enma11235.surveysystemapi.dto.response.CreateUserResponseBody;
+import com.github.enma11235.surveysystemapi.exception.NicknameAlreadyInUseException;
 import com.github.enma11235.surveysystemapi.model.User;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
