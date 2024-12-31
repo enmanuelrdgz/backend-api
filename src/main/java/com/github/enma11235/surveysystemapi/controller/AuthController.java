@@ -16,20 +16,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/auth")
 public class AuthController {
     private final UserService userService;
-    private final AuthService authenticationService;
+    private final AuthService authService;
 
 
     @Autowired
-    public AuthController(UserService userService, AuthService authenticationService) {
+    public AuthController(UserService userService, AuthService authService) {
         this.userService = userService;
-        this.authenticationService = authenticationService;
+        this.authService = authService;
     }
 
     // LOG IN
     @PostMapping
     public ResponseEntity<Void> login(@RequestBody @Valid LoginRequestBody body) {
-        String token = authenticationService.authenticate(body.getNickname(), body.getPassword());
-        String cookie = "token=" + token + "; HttpOnly; Secure; Path=/; SameSite=Strict";
+        String token = authService.authenticate(body.getNickname(), body.getPassword());
+        String cookie = "tokkken=" + token + "; HttpOnly; Secure; Path=/; SameSite=Strict";
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, cookie);
 

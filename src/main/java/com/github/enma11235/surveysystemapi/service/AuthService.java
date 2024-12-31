@@ -25,9 +25,10 @@ public class AuthService {
             // Verificar las credenciales
             if (!password.equals(user.get().getPassword())) {
                 throw new AuthException("Invalid password");
+            } else {
+                // Generar un token JWT
+                return jwtTokenProvider.generateToken(user.get());
             }
-            // Generar un token JWT
-            return jwtTokenProvider.generateToken(user.get());
         } else {
             throw new AuthException("Invalid nickname");
         }
