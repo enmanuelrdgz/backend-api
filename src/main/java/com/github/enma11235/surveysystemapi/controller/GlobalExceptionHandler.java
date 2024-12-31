@@ -17,7 +17,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NicknameAlreadyInUseException.class)
-    public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(AuthException ex) {
+    public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(NicknameAlreadyInUseException ex) {
         ErrorResponse errorResponse = new ErrorResponse("NICKNAME_ALREADY_IN_USE", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
