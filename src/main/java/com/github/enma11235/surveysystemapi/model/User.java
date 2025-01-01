@@ -20,6 +20,9 @@ public class User {
 
     private String img;
 
+    @Column(nullable = false)
+    private String created_at;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Survey> surveys;
 
@@ -63,5 +66,13 @@ public class User {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }
