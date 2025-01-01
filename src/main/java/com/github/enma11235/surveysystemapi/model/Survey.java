@@ -18,6 +18,9 @@ public class Survey {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
+    private String created_at;
+
     @OneToMany(mappedBy = "survey", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Column(nullable = false)
     private List<Option> options;
@@ -48,6 +51,14 @@ public class Survey {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
     public void setTitle(String title) {
