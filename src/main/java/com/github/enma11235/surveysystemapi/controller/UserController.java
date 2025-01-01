@@ -4,6 +4,7 @@ import com.github.enma11235.surveysystemapi.dto.model.UserDTO;
 import com.github.enma11235.surveysystemapi.dto.request.CreateUserRequestBody;
 import com.github.enma11235.surveysystemapi.dto.response.GetUserByIdResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.CreateUserResponseBody;
+import com.github.enma11235.surveysystemapi.exception.AuthException;
 import com.github.enma11235.surveysystemapi.model.User;
 import com.github.enma11235.surveysystemapi.service.UserService;
 import jakarta.validation.Valid;
@@ -45,6 +46,9 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<GetUserByIdResponseBody> getUserById(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
         //obtenemos el token
+        if(authorizationHeader == null || authorizationHeader.length() <= 7) {
+            throw new AuthException("Invalid token");
+        }
         String token = authorizationHeader.substring(7);
         UserDTO user = userService.getUserById(id, token);
         GetUserByIdResponseBody responseBody = new GetUserByIdResponseBody(user.getId(), user.getNickname(), user.getCreatedAt());

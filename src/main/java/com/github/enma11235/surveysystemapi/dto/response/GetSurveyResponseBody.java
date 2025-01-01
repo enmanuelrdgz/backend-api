@@ -12,12 +12,12 @@ public class GetSurveyResponseBody {
     private List<SurveyOption> options;
     private String created_at;
 
-    public GetSurveyResponseBody(String created_at, List<SurveyOption> options, SurveyCreator creator, String title, Long id) {
-        this.created_at = created_at;
-        this.options = options;
-        this.creator = creator;
-        this.title = title;
+    public GetSurveyResponseBody(Long id, String title, SurveyCreator creator, List<SurveyOption> options, String created_at) {
         this.id = id;
+        this.title = title;
+        this.creator = creator;
+        this.options = options;
+        this.created_at = created_at;
     }
 
     public Long getId() {

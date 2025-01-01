@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping
     public ResponseEntity<Void> login(@RequestBody @Valid LoginRequestBody body) {
         String token = authService.authenticate(body.getNickname(), body.getPassword());
-        String cookie = "tokkken=" + token + "; HttpOnly; Secure; Path=/; SameSite=Strict";
+        String cookie = "token=" + token + "; HttpOnly; Secure; Path=/; SameSite=Strict";
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, cookie);
 
