@@ -5,6 +5,7 @@ import com.github.enma11235.surveysystemapi.dto.model.SurveyDTO;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyOption;
 import com.github.enma11235.surveysystemapi.dto.response.CreateUserResponseBody;
 import com.github.enma11235.surveysystemapi.exception.AuthException;
+import com.github.enma11235.surveysystemapi.exception.SurveyNotFoundException;
 import com.github.enma11235.surveysystemapi.exception.UserNotFoundException;
 import com.github.enma11235.surveysystemapi.model.Option;
 import com.github.enma11235.surveysystemapi.model.Survey;
@@ -20,6 +21,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -36,14 +38,36 @@ public class SurveyService {
         this.userRepository = userRepository;
     }
 
-    //method to find a survey by ID
-    public Optional<Survey> findSurveyById(Long id) {
-        return surveyRepository.findById(id);
-    }
+    //GET SURVEY
+    public SurveyDTO getSurveyById(Long id, String token) {
+        boolean validToken = jwtTokenProvider.validateToken(token);
+        if(validToken) {
+            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            Optional<Survey> survey = surveyRepository.findById(id);
+            if(survey.isPresent()) {
+                String creatorNickname = survey.get().getUser().getNickname();
+                if(creatorNickname.equals(nickname)) {
+                    //creamos las opciones
+                    List<SurveyOption> options = new ArrayList<SurveyOption>();
+                    for(Option op : survey.get().getOptions()) {
+                        options.add(new SurveyOption(op.getId(), op.getName(), op.getVotes().size()));
+                    }
+                    return new SurveyDTO(
+                            survey.get().getId(),
+                            survey.get().getTitle(),
+                            new SurveyCreator(survey.get().getUser().getId(), survey.get().getUser().getNickname()),
+                            options,
+                            survey.get().getCreated_at());
 
-    //method to get all surveys
-    public List<Survey> findAllSurveys(){
-        return surveyRepository.findAll();
+                } else {
+                    throw new AuthException("You are not the creator of this survey");
+                }
+            } else {
+                throw new SurveyNotFoundException("The survey does not exist");
+            }
+        } else {
+            throw new AuthException("Invalid token");
+        }
     }
 
     //CREATE SURVEY
@@ -83,9 +107,5 @@ public class SurveyService {
         } else {
             throw new AuthException("Invalid token, are you logged in?");
         }
-    }
-
-    public void deleteSurveyById(Long id) {
-        surveyRepository.deleteById(id);
     }
 }
