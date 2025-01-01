@@ -1,7 +1,8 @@
 package com.github.enma11235.surveysystemapi.controller;
 
-import com.github.enma11235.surveysystemapi.dto.*;
+import com.github.enma11235.surveysystemapi.dto.model.UserDTO;
 import com.github.enma11235.surveysystemapi.dto.request.CreateUserRequestBody;
+import com.github.enma11235.surveysystemapi.dto.response.GetUserByIdResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.CreateUserResponseBody;
 import com.github.enma11235.surveysystemapi.model.User;
 import com.github.enma11235.surveysystemapi.service.UserService;
@@ -40,18 +41,14 @@ public class UserController {
         return ResponseEntity.ok(usersListDTO);
     }
 
-    // Endpoint to get a user by ID
+    // GET USER
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.findUserById(id);
-        if(user.isPresent()) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setNickname(user.get().getNickname());
-            userDTO.setId(user.get().getId());
-            return ResponseEntity.ok(userDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<GetUserByIdResponseBody> getUserById(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+        //obtenemos el token
+        String token = authorizationHeader.substring(7);
+        UserDTO user = userService.getUserById(id, token);
+        GetUserByIdResponseBody responseBody = new GetUserByIdResponseBody(user.getId(), user.getNickname(), user.getCreatedAt());
+        return ResponseEntity.ok(responseBody);
     }
 
     // CREATE USER
