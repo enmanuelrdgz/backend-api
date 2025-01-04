@@ -5,6 +5,7 @@ import com.github.enma11235.surveysystemapi.dto.model.SurveyOption;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyDTO;
 import com.github.enma11235.surveysystemapi.dto.response.CreateSurveyResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.GetSurveyResponseBody;
+import com.github.enma11235.surveysystemapi.dto.response.GetSurveysResponseBody;
 import com.github.enma11235.surveysystemapi.model.Option;
 import com.github.enma11235.surveysystemapi.model.Survey;
 import com.github.enma11235.surveysystemapi.service.SurveyService;
@@ -44,7 +45,14 @@ public class SurveyController {
         //obtenemos el token
         String token = authorizationHeader.substring(7);
         SurveyDTO surveyDTO = surveyService.getSurveyById(id, token);
-        GetSurveyResponseBody responseBody = new GetSurveyResponseBody(surveyDTO.getCreated_at(), surveyDTO.getOptions(), surveyDTO.getCreator(), surveyDTO.getTitle(), surveyDTO.getId());
+        GetSurveyResponseBody responseBody = new GetSurveyResponseBody(surveyDTO.getId(), surveyDTO.getTitle(), surveyDTO.getCreator(), surveyDTO.getOptions(), surveyDTO.getCreated_at());
+        return ResponseEntity.ok(responseBody);
+    }
+
+    //GET ALL SURVEYS
+    @GetMapping
+    public ResponseEntity<List<GetSurveysResponseBody>> getSurveys() {
+        List<GetSurveysResponseBody> responseBody = surveyService.getAllSurveys();
         return ResponseEntity.ok(responseBody);
     }
 }
