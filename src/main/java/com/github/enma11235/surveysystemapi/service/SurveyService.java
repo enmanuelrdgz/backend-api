@@ -3,7 +3,7 @@ package com.github.enma11235.surveysystemapi.service;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyCreator;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyDTO;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyOption;
-import com.github.enma11235.surveysystemapi.dto.response.CreateUserResponseBody;
+import com.github.enma11235.surveysystemapi.dto.response.GetSurveysResponseBody;
 import com.github.enma11235.surveysystemapi.exception.AuthException;
 import com.github.enma11235.surveysystemapi.exception.SurveyNotFoundException;
 import com.github.enma11235.surveysystemapi.exception.UserNotFoundException;
@@ -19,10 +19,7 @@ import com.github.enma11235.surveysystemapi.repository.SurveyRepository;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class SurveyService {
@@ -107,5 +104,33 @@ public class SurveyService {
         } else {
             throw new AuthException("Invalid token, are you logged in?");
         }
+    }
+
+    //GET ALL SURVEYS
+    public List<GetSurveysResponseBody> getAllSurveys() {
+        List<Survey> surveys = surveyRepository.findAll();
+
+        List<GetSurveysResponseBody> returnList = new ArrayList<GetSurveysResponseBody>();
+
+        for(Survey s : surveys) {
+            //debemos sacar los usuarios y las opciones de cada survey
+            HashMap<String, Object> creator = new HashMap<String, Object>();
+            creator.put("id", s.getUser().getId());
+            creator.put("nickname", s.getUser().getNickname());
+            creator.put("image", s.getUser().getImg());
+
+            List<HashMap<String, Object>> optionsList = new ArrayList<HashMap<String, Object>>();
+            for(Option op : s.getOptions()) {
+                HashMap<String, Object> optionHashMap = new HashMap<String, Object>();
+                optionHashMap.put("id", op.getId());
+                optionHashMap.put("name", op.getName());
+                optionHashMap.put("votes", op.getVotes().size());
+                optionsList.add(optionHashMap);
+            }
+
+            returnList.add(new GetSurveysResponseBody(s.getId(), s.getTitle(), creator, optionsList));
+
+        }
+        return returnList;
     }
 }
