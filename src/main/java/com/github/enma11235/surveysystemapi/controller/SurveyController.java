@@ -31,9 +31,9 @@ public class SurveyController {
 
     // CREATE SURVEY
     @PostMapping
-    public ResponseEntity<CreateSurveyResponseBody> createSurvey(@RequestBody @Valid CreateSurveyRequestBody body, @RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<CreateSurveyResponseBody> createSurvey(@RequestBody @Valid CreateSurveyRequestBody body) {
         //obtenemos el token
-        String token = authorizationHeader.substring(7);
+        String token = body.getToken();
         SurveyDTO survey = surveyService.createSurvey(body.getTitle(), body.getOptions(), token);
         CreateSurveyResponseBody responseBody = new CreateSurveyResponseBody(survey.getId(), survey.getTitle(), survey.getCreator(), survey.getOptions(), survey.getCreated_at());
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
