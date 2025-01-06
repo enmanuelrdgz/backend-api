@@ -10,11 +10,11 @@ import com.github.enma11235.surveysystemapi.service.UserService;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -33,28 +33,24 @@ public class AuthController {
 
     // LOG IN
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid LoginRequestBody body) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody @Valid LoginRequestBody body) {
         String token = authService.authenticate(body.getNickname(), body.getPassword());
-        String cookie = "token=" + token + "; HttpOnly; Secure; Path=/; SameSite=Strict";
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.SET_COOKIE, cookie);
-
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put("token", token);
         // Devolver la respuesta con los headers
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
+        return ResponseEntity.ok(response);
     }
 
     //REGISTER
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody @Valid CreateUserRequestBody body) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody @Valid CreateUserRequestBody body) {
         CreateUserResponseBody responseBody = userService.createUser(body.getNickname(), body.getPassword());
         Optional<User> user = userService.findUserByNickname(responseBody.getNickname());
         String token = authService.authenticate(user.get().getNickname(), user.get().getPassword());
-        String cookie = "token=" + token + "; HttpOnly; Secure; Path=/; SameSite=Strict";
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.SET_COOKIE, cookie);
-
+        Map<String, Object> response = new HashMap<String, Object>();
+        response.put("token", token);
         // Devolver la respuesta con los headers
-        return ResponseEntity.status(HttpStatus.OK).headers(headers).build();
+        return ResponseEntity.ok(response);
     }
 
 }
