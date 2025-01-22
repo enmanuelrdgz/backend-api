@@ -82,8 +82,10 @@ public class GetSurveysResponseBody {
     private String title;
     private Creator creator;
     private List<Option> options;
+    private int total_votes;
+    private String created_at;
 
-    public GetSurveysResponseBody(long id, String title, HashMap<String, Object> creator, List<HashMap<String, Object>> _options) {
+    public GetSurveysResponseBody(long id, String title, HashMap<String, Object> creator, List<HashMap<String, Object>> _options, int total_votes, String created_at) {
         this.id = id;
         this.title = title;
         this.creator = new Creator((long) creator.get("id"), (String) creator.get("nickname"), (String) creator.get("image"));
@@ -92,6 +94,24 @@ public class GetSurveysResponseBody {
             options.add(new Option((long) map.get("id"), (String) map.get("name"), (int) map.get("votes")));
         }
         this.options = options;
+        this.total_votes = total_votes;
+        this.created_at = created_at;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
+    public int getTotal_votes() {
+        return total_votes;
+    }
+
+    public void setTotal_votes(int total_votes) {
+        this.total_votes = total_votes;
     }
 
     public long getId() {

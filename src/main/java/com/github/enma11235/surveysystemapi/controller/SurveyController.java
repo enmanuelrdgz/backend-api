@@ -35,7 +35,7 @@ public class SurveyController {
         //obtenemos el token
         String token = body.getToken();
         SurveyDTO survey = surveyService.createSurvey(body.getTitle(), body.getOptions(), token);
-        CreateSurveyResponseBody responseBody = new CreateSurveyResponseBody(survey.getId(), survey.getTitle(), survey.getCreator(), survey.getOptions(), survey.getCreated_at());
+        CreateSurveyResponseBody responseBody = new CreateSurveyResponseBody(survey.getId(), survey.getTitle(), survey.getCreator(), survey.getOptions(), survey.getCreated_at(), 0);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
     }
 

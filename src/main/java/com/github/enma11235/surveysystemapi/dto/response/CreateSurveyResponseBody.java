@@ -10,13 +10,23 @@ public class CreateSurveyResponseBody {
     private SurveyCreator creator;
     private List<SurveyOption> options;
     private String created_at;
+    private int total_votes;
 
-    public CreateSurveyResponseBody(Long id, String title, SurveyCreator creator, List<SurveyOption> options, String created_at) {
+    public CreateSurveyResponseBody(Long id, String title, SurveyCreator creator, List<SurveyOption> options, String created_at, int total_votes) {
         this.id = id;
         this.title = title;
         this.creator = creator;
         this.options = options;
         this.created_at = created_at;
+        this.total_votes = total_votes;
+    }
+
+    public int getTotal_votes() {
+        return total_votes;
+    }
+
+    public void setTotal_votes(int total_votes) {
+        this.total_votes = total_votes;
     }
 
     public Long getId() {

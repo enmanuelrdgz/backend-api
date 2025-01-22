@@ -25,6 +25,17 @@ public class Survey {
     @Column(nullable = false)
     private List<Option> options;
 
+    @Column(nullable = false)
+    private int total_votes;
+
+    public int getTotal_votes() {
+        return total_votes;
+    }
+
+    public void setTotal_votes(int total_votes) {
+        this.total_votes = total_votes;
+    }
+
     public List<Option> getOptions() {
         return options;
     }

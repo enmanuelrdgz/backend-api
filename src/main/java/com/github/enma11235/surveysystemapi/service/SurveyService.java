@@ -15,7 +15,9 @@ import com.github.enma11235.surveysystemapi.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import com.github.enma11235.surveysystemapi.repository.SurveyRepository;
+import com.github.enma11235.surveysystemapi.utils.DateDifferenceCalculator;
 
+import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,11 +52,13 @@ public class SurveyService {
                         options.add(new SurveyOption(op.getId(), op.getName(), op.getVotes().size()));
                     }
                     return new SurveyDTO(
-                            survey.get().getId(),
-                            survey.get().getTitle(),
-                            new SurveyCreator(survey.get().getUser().getId(), survey.get().getUser().getNickname()),
-                            options,
-                            survey.get().getCreated_at());
+                        survey.get().getId(),
+                        survey.get().getTitle(),
+                        new SurveyCreator(survey.get().getUser().getId(), survey.get().getUser().getNickname()),
+                        options,
+                        survey.get().getCreated_at(),
+                        survey.get().getTotal_votes()
+                    );
 
                 } else {
                     throw new AuthException("You are not the creator of this survey");
@@ -74,8 +78,8 @@ public class SurveyService {
             String nickname = jwtTokenProvider.getUsernameFromToken(token);
             Optional<User> user = userRepository.findByNickname(nickname);
             if(user.isPresent()) {
-                ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-                String formattedDate = now.format(DateTimeFormatter.ISO_INSTANT);
+                LocalDate date = LocalDate.now();
+                String dateString = date.toString();
 
                 Survey survey = new Survey();
                 survey.setTitle(title);
@@ -88,7 +92,8 @@ public class SurveyService {
                     surveyOptions.add(op);
                 }
                 survey.setOptions(surveyOptions);
-                survey.setCreated_at(formattedDate);
+                survey.setCreated_at(dateString);
+                survey.setTotal_votes(0);
                 Survey savedSurvey = surveyRepository.save(survey);
 
                 SurveyCreator creator = new SurveyCreator(user.get().getId(), user.get().getNickname());
@@ -97,7 +102,7 @@ public class SurveyService {
                     SurveyOption sop = new SurveyOption(op.getId(), op.getName(), 0);
                     savedSurveyOptions.add(sop);
                 }
-                return new SurveyDTO(savedSurvey.getId(), savedSurvey.getTitle(), creator, savedSurveyOptions, savedSurvey.getCreated_at());
+                return new SurveyDTO(savedSurvey.getId(), savedSurvey.getTitle(), creator, savedSurveyOptions, savedSurvey.getCreated_at(), 0);
             } else {
                 throw new UserNotFoundException("It seems like your user was deleted");
             }
@@ -127,8 +132,14 @@ public class SurveyService {
                 optionHashMap.put("votes", op.getVotes().size());
                 optionsList.add(optionHashMap);
             }
-
-            returnList.add(new GetSurveysResponseBody(s.getId(), s.getTitle(), creator, optionsList));
+            long date = DateDifferenceCalculator.calcularDiferenciaDias(s.getCreated_at(), LocalDate.now().toString());
+            String dateString;
+            if(date == 0) {
+                dateString = "today";
+            } else {
+                dateString = date + " days ago";
+            }
+            returnList.add(new GetSurveysResponseBody(s.getId(), s.getTitle(), creator, optionsList, s.getTotal_votes(), dateString));
 
         }
         return returnList;
