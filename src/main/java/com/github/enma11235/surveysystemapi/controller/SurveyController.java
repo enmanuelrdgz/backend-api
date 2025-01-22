@@ -3,6 +3,7 @@ package com.github.enma11235.surveysystemapi.controller;
 import com.github.enma11235.surveysystemapi.dto.request.CreateSurveyRequestBody;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyOption;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyDTO;
+import com.github.enma11235.surveysystemapi.dto.request.VoteRequestBody;
 import com.github.enma11235.surveysystemapi.dto.response.CreateSurveyResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.GetSurveyResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.GetSurveysResponseBody;
@@ -54,5 +55,12 @@ public class SurveyController {
     public ResponseEntity<List<GetSurveysResponseBody>> getSurveys() {
         List<GetSurveysResponseBody> responseBody = surveyService.getAllSurveys();
         return ResponseEntity.ok(responseBody);
+    }
+
+    //VOTE
+    @PostMapping("/{survey_id}/{option_id}")
+    public ResponseEntity<Void> vote(@PathVariable Long survey_id, @PathVariable Long option_id, @RequestBody @Valid VoteRequestBody body) {
+        surveyService.vote(survey_id, option_id, body.getToken());
+        return ResponseEntity.ok().build();
     }
 }

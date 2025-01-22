@@ -16,6 +16,13 @@ public class Vote {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Vote(User user, Option option) {
+        this.option = option;
+        this.user = user;
+    }
+
+    public Vote() {}
+
     public Option getOption() {
         return option;
     }

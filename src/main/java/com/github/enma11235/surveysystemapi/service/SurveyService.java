@@ -5,36 +5,38 @@ import com.github.enma11235.surveysystemapi.dto.model.SurveyDTO;
 import com.github.enma11235.surveysystemapi.dto.model.SurveyOption;
 import com.github.enma11235.surveysystemapi.dto.response.GetSurveysResponseBody;
 import com.github.enma11235.surveysystemapi.exception.AuthException;
+import com.github.enma11235.surveysystemapi.exception.OptionNotFoundException;
 import com.github.enma11235.surveysystemapi.exception.SurveyNotFoundException;
 import com.github.enma11235.surveysystemapi.exception.UserNotFoundException;
 import com.github.enma11235.surveysystemapi.model.Option;
 import com.github.enma11235.surveysystemapi.model.Survey;
 import com.github.enma11235.surveysystemapi.model.User;
+import com.github.enma11235.surveysystemapi.model.Vote;
 import com.github.enma11235.surveysystemapi.repository.UserRepository;
 import com.github.enma11235.surveysystemapi.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import com.github.enma11235.surveysystemapi.repository.SurveyRepository;
 import com.github.enma11235.surveysystemapi.utils.DateDifferenceCalculator;
+import com.github.enma11235.surveysystemapi.repository.OptionRepository;
 
 import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class SurveyService {
 
     private final SurveyRepository surveyRepository;
+    private final OptionRepository optionRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
     @Autowired
-    public SurveyService(SurveyRepository surveyRepository, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
+    public SurveyService(SurveyRepository surveyRepository, OptionRepository optionRepository, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.surveyRepository = surveyRepository;
         this.userRepository = userRepository;
+        this.optionRepository = optionRepository;
     }
 
     //GET SURVEY
@@ -143,5 +145,38 @@ public class SurveyService {
 
         }
         return returnList;
+    }
+
+    //VOTE
+    public void vote(long survey_id, long option_id, String token) {
+        boolean validToken = jwtTokenProvider.validateToken(token);
+        if(validToken) {
+            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            Optional<Survey> survey = surveyRepository.findById(survey_id);
+            if(survey.isPresent()) {
+                survey.get().setTotal_votes(survey.get().getTotal_votes() + 1);
+                List<Option> options = survey.get().getOptions();
+                Option option = null;
+                for(Option o : options) {
+                    if(o.getId() == option_id) {
+                        option = o;
+                    }
+                }
+                if(option != null) {
+                    Vote newVote = new Vote(survey.get().getUser(), option);
+                    List<Vote> option_votes = option.getVotes();
+                    option_votes.add(newVote);
+                    option.setVotes(option_votes);
+                    surveyRepository.save(survey.get());
+                    optionRepository.save(option);
+                } else {
+                    throw new OptionNotFoundException("the option id is not correct");
+                }
+            } else {
+                throw new SurveyNotFoundException("The survey does not exist");
+            }
+        } else {
+            throw new AuthException("Invalid token");
+        }
     }
 }
