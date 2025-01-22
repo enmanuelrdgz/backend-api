@@ -2,10 +2,13 @@ package com.github.enma11235.surveysystemapi.controller;
 
 import com.github.enma11235.surveysystemapi.dto.model.UserDTO;
 import com.github.enma11235.surveysystemapi.dto.request.CreateUserRequestBody;
-import com.github.enma11235.surveysystemapi.dto.response.GetUserByIdResponseBody;
+import com.github.enma11235.surveysystemapi.dto.request.EditUserRequestBody;
+import com.github.enma11235.surveysystemapi.dto.request.GetUserRequestBody;
+import com.github.enma11235.surveysystemapi.dto.response.EditUserResponseBody;
+import com.github.enma11235.surveysystemapi.dto.response.GetUserResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.CreateUserResponseBody;
-import com.github.enma11235.surveysystemapi.exception.AuthException;
 import com.github.enma11235.surveysystemapi.model.User;
+import com.github.enma11235.surveysystemapi.service.AuthService;
 import com.github.enma11235.surveysystemapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,45 +16,26 @@ import org.springframework.http.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
     private AuthController authController;
+    private AuthService authService;
 
     @Autowired
-    public UserController(UserService userService, AuthController authController) {
+    public UserController(UserService userService, AuthController authController, AuthService authService) {
         this.userService = userService;
         this.authController = authController;
-    }
-
-    // Endpoint to get all users
-    @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        List<User> users = userService.findAllUsers();
-        List<UserDTO> usersListDTO = new ArrayList<UserDTO>();
-        for(User u : users) {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setId(u.getId());
-            userDTO.setNickname(u.getNickname());
-            usersListDTO.add(userDTO);
-        }
-        return ResponseEntity.ok(usersListDTO);
+        this.authService = authService;
     }
 
     // GET USER
-    @GetMapping("/{id}")
-    public ResponseEntity<GetUserByIdResponseBody> getUserById(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
-        //obtenemos el token
-        if(authorizationHeader == null || authorizationHeader.length() <= 7) {
-            throw new AuthException("Invalid token");
-        }
-        String token = authorizationHeader.substring(7);
-        UserDTO user = userService.getUserById(id, token);
-        GetUserByIdResponseBody responseBody = new GetUserByIdResponseBody(user.getId(), user.getNickname(), user.getCreatedAt());
+    @PostMapping("/{id}")
+    public ResponseEntity<GetUserResponseBody> getUserById(@PathVariable Long id, @RequestBody @Valid GetUserRequestBody body) {
+        UserDTO user = userService.getUserById(id, body.getToken());
+        GetUserResponseBody responseBody = new GetUserResponseBody(user.getId(), user.getNickname(), user.getPassword(), user.getImage());
         return ResponseEntity.ok(responseBody);
     }
 
@@ -60,6 +44,15 @@ public class UserController {
     public ResponseEntity<CreateUserResponseBody> createUser(@RequestBody @Valid CreateUserRequestBody body) {
         CreateUserResponseBody response = userService.createUser(body.getNickname(), body.getPassword());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    //EDIT USER
+    @PostMapping("/edit")
+    public ResponseEntity<EditUserResponseBody> editUser(@RequestBody @Valid EditUserRequestBody body) {
+        User editedUser = userService.editUser(body.getNickname(), body.getPassword(), body.getImage(), body.getToken());
+        String newToken = authService.authenticate(editedUser.getNickname(), editedUser.getPassword());
+        EditUserResponseBody responseBody = new EditUserResponseBody(newToken);
+        return ResponseEntity.ok(responseBody);
     }
 
     // Endpoint to delete a user by ID
