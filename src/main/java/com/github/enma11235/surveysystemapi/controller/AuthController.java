@@ -35,8 +35,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody @Valid LoginRequestBody body) {
         String token = authService.authenticate(body.getNickname(), body.getPassword());
+        Long id = userService.getUserId(token);
         Map<String, Object> response = new HashMap<String, Object>();
         response.put("token", token);
+        response.put("id", id);
         // Devolver la respuesta con los headers
         return ResponseEntity.ok(response);
     }

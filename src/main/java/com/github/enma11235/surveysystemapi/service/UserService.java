@@ -37,7 +37,7 @@ public class UserService {
             if(validToken) {
                 String nickname = jwtTokenProvider.getUsernameFromToken(token);
                 if(user.get().getNickname().equals(nickname)) {
-                    return new UserDTO(user.get().getId(), user.get().getNickname(), user.get().getCreated_at());
+                    return new UserDTO(user.get().getId(), user.get().getNickname(), user.get().getCreated_at(), user.get().getPassword(), user.get().getImg());
                 } else {
                     throw new AuthException("Not authorized to get this user info");
                 }
@@ -68,6 +68,39 @@ public class UserService {
             user.setCreated_at(formattedDate);
             User savedUser = userRepository.save(user);
             return new CreateUserResponseBody(savedUser.getId(), savedUser.getNickname(), formattedDate);
+        }
+    }
+
+    public long getUserId(String token) {
+        boolean validToken = jwtTokenProvider.validateToken(token);
+        if(validToken) {
+            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            Optional<User> user = userRepository.findByNickname(nickname);
+            if(user.isPresent()) {
+                return user.get().getId();
+            } else {
+                throw new UserNotFoundException("There is no user with that id");
+            }
+        }
+        return -1;
+    }
+
+    public User editUser(String new_nickname, String new_password, String new_image, String token) {
+        boolean validToken = jwtTokenProvider.validateToken(token);
+        if(validToken) {
+            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            Optional<User> user = userRepository.findByNickname(nickname);
+            if(user.isPresent()) {
+                user.get().setNickname(new_nickname);
+                user.get().setPassword(new_password);
+                user.get().setImg(new_image);
+                userRepository.save(user.get());
+                return user.get();
+            } else {
+                throw new UserNotFoundException("User does not exist");
+            }
+        } else {
+            throw new AuthException("Invalid Token");
         }
     }
 

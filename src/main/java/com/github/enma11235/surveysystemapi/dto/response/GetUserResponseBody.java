@@ -1,16 +1,14 @@
-package com.github.enma11235.surveysystemapi.dto.model;
+package com.github.enma11235.surveysystemapi.dto.response;
 
-public class UserDTO {
+public class GetUserResponseBody {
     private Long id;
     private String nickname;
-    private String createdAt;
     private String password;
     private String image;
 
-    public UserDTO(Long id, String nickname, String createdAt, String password, String image) {
+    public GetUserResponseBody(Long id, String nickname, String password, String image) {
         this.id = id;
         this.nickname = nickname;
-        this.createdAt = createdAt;
         this.password = password;
         this.image = image;
     }
@@ -31,8 +29,6 @@ public class UserDTO {
         this.image = image;
     }
 
-    public UserDTO(){}
-
     public Long getId() {
         return id;
     }
@@ -47,13 +43,5 @@ public class UserDTO {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
     }
 }
