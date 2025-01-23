@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.github.enma11235</groupId>
 	<artifactId>quickpolls-backend</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>quickpolls-backend</name>
 	<description>Backend for QuickPolls</description>
 	<url>https://github.com/enma11235/quickpolls-backend</url>
