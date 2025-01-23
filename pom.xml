@@ -9,11 +9,11 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.github.enma11235</groupId>
-	<artifactId>quickpolls-backend</artifactId>
-	<version>1.0.0</version>
-	<name>quickpolls-backend</name>
-	<description>Backend for QuickPolls</description>
-	<url>https://github.com/enma11235/quickpolls-backend</url>
+	<artifactId>generic-poll-system</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
+	<name>Generic Poll System</name>
+	<description>Generic Poll System build with Spring Framework</description>
+	<url>https://github.com/enma11235/generic-poll-system</url>
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.2.5</version> <!-- Verifica la versión más reciente disponible -->
+			<version>42.2.5</version>
 		</dependency>
 	</dependencies>
 
