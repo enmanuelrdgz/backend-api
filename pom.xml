@@ -6,19 +6,33 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>com.github.enma11235</groupId>
-	<artifactId>surveyapp-backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>backend</name>
-	<description>API para mi aplicacion de encuestas</description>
-	<url/>
+	<artifactId>quickpolls-backend</artifactId>
+	<version>1.0.0</version>
+	<name>quickpolls-backend</name>
+	<description>Backend for QuickPolls</description>
+	<url>https://github.com/enma11235/quickpolls-backend</url>
 	<licenses>
-		<license/>
+		<license>
+			<name>MIT License</name>
+			<url>https://opensource.org/licenses/MIT</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
 	<developers>
-		<developer/>
+		<developer>
+			<id>enma11235</id>
+			<name>Enmanuel Rodriguez</name>
+			<email>enmaundostres@gmail.com</email>
+			<url>https://github.com/enma11235</url>
+			<roles>
+				<role>Lead Developer</role>
+				<role>Maintainer</role>
+			</roles>
+			<timezone>-3</timezone>
+		</developer>
 	</developers>
 	<scm>
 		<connection/>
@@ -40,10 +54,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
@@ -81,13 +91,11 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>42.2.5</version> <!-- Verifica la versión más reciente disponible -->
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -112,7 +120,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.5.2</version>
 				<configuration>
-					<skipTests>true</skipTests> <!-- Asegura que las pruebas se ejecuten -->
+					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
 
