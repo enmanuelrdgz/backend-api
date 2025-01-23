@@ -108,10 +108,10 @@ Returns the details of the user in JSON format.
 # OPERATION: CREATE SURVEY
 
 **Endpoint**:  
-`POST /api/survey`
+`POST /api/poll`
 
 **Description**:  
-This endpoint allows authenticated users to create a new survey.
+This endpoint allows authenticated users to create a new poll.
 
 ## Requirements
 
@@ -124,9 +124,9 @@ The body of the request must be sent in JSON format with the following fields:
 
 |field   |type  |required|description  |
 |--------|------|--------|-------------|
-|title|string|yes     |survey title|
-|options|array|yes     |an array of options for the survey|
-|options[].name|string|yes     |the name of a survey option|
+|title|string|yes     |poll title|
+|options|array|yes     |an array of options for the poll|
+|options[].name|string|yes     |the name of a poll option|
 
 **Example Request Body**
 ```json
@@ -143,10 +143,10 @@ The body of the request must be sent in JSON format with the following fields:
 ## Responses
 
 **Success (201 Created)**  
-When the survey is successfully created, the server returns:  
+When the poll is successfully created, the server returns:  
 + Status Code: `201 Created`
 + Headers: 
-  + `Location`: URI of the created resource (e.g., /api/survey/123)
+  + `Location`: URI of the created resource (e.g., /api/poll/123)
 + Body: Survey information in JSON format.  
 
 **Example Response Body**  
@@ -178,15 +178,15 @@ When the survey is successfully created, the server returns:
 # OPERATION: GET SURVEY
 
 **Endpoint**:  
-`GET /api/survey/{id}`  
+`GET /api/poll/{id}`  
 
 **Description**:  
-Retrieves detailed information about a specific survey based on their unique identifier (`id`).
+Retrieves detailed information about a specific poll based on their unique identifier (`id`).
 
 ## Requirements
 
 **Path parameters**:  
-+ `id`: The unique identifier of the survey to retrieve.  
++ `id`: The unique identifier of the poll to retrieve.  
 
 **Headers**:  
 + `Authorization`: The endpoint requires an authorization token to ensure secure access.  
@@ -195,14 +195,14 @@ Retrieves detailed information about a specific survey based on their unique ide
 
 **Example Request**
 ```
-GET /api/survey/123 HTTP/1.1
+GET /api/poll/123 HTTP/1.1
 Authorization: Bearer {token}
 ```
 
 ## Responses
 
 **Success (200 OK)**  
-Returns the details of the survey in JSON format.  
+Returns the details of the poll in JSON format.  
 
 **Example Response Body**  
 ```json
@@ -226,7 +226,7 @@ Returns the details of the survey in JSON format.
 |Status Code              |Description                                                 |
 |-------------------------|------------------------------------------------------------|
 |400 Bad Request          |Returned if the id is not a valid format|
-|404 Not Found             |Returned if a survey with the specified id does not exist                   |
+|404 Not Found             |Returned if a poll with the specified id does not exist                   |
 
 # OPERATION: LOG IN
 

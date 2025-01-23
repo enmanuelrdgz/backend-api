@@ -1,6 +1,6 @@
 # Generic Poll System
 
-This Spring Boot application serves as the core of my Generic Poll System, housing its business logic and functioning as an API to enable interaction from the Next.js client.
+This Spring Boot application serves as the core of a Generic Poll System, housing its business logic and functioning as an API to enable interaction from the client.
 
 ## Technologies Used
 
@@ -8,17 +8,17 @@ This Spring Boot application serves as the core of my Generic Poll System, housi
 - **Spring Boot**: Framework used to build the RESTful API.
 - **Hibernate**: Used for database operations.
 - **JWT (JSON Web Token)**: For authentication and authorization.
-- **PostgreSQL**: Relational database used for storing user and survey data.
+- **PostgreSQL**: Relational database used for storing user and poll data.
 
 ## Endpoints
 
 ### Survey Endpoints
 
-- `POST api/survey` - Create a new survey.
-- `GET api/survey` - Retrieve a list of all surveys.
-- `GET api/survey/{id}` - Get details of a specific survey by ID.
-- `PUT api/survey/{id}` - Update a survey by ID.
-- `DELETE api/survey/{id}` - Delete a survey by ID.
+- `POST api/poll` - Create a new poll.
+- `GET api/poll` - Retrieve a list of all polls.
+- `GET api/poll/{id}` - Get details of a specific poll by ID.
+- `PUT api/poll/{id}` - Update a poll by ID.
+- `DELETE api/poll/{id}` - Delete a poll by ID.
 
 ### User Endpoints
 
@@ -36,4 +36,4 @@ This Spring Boot application serves as the core of my Generic Poll System, housi
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/survey-api.git
+   git clone https://github.com/yourusername/poll-api.git
