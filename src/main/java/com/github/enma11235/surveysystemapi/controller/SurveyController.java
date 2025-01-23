@@ -7,6 +7,7 @@ import com.github.enma11235.surveysystemapi.dto.request.VoteRequestBody;
 import com.github.enma11235.surveysystemapi.dto.response.CreateSurveyResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.GetSurveyResponseBody;
 import com.github.enma11235.surveysystemapi.dto.response.GetSurveysResponseBody;
+import com.github.enma11235.surveysystemapi.dto.response.VoteResponseBody;
 import com.github.enma11235.surveysystemapi.model.Option;
 import com.github.enma11235.surveysystemapi.model.Survey;
 import com.github.enma11235.surveysystemapi.service.SurveyService;
@@ -59,8 +60,23 @@ public class SurveyController {
 
     //VOTE
     @PostMapping("/{survey_id}/{option_id}")
-    public ResponseEntity<Void> vote(@PathVariable Long survey_id, @PathVariable Long option_id, @RequestBody @Valid VoteRequestBody body) {
-        surveyService.vote(survey_id, option_id, body.getToken());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<VoteResponseBody> vote(@PathVariable Long survey_id, @PathVariable Long option_id, @RequestBody @Valid VoteRequestBody body) {
+        Survey survey = surveyService.vote(option_id, body.getToken());
+        HashMap<String, Object> creator = new HashMap<String, Object>();
+        creator.put("id", survey.getUser().getId());
+        creator.put("nickname", survey.getUser().getNickname());
+        creator.put("image", survey.getUser().getImg());
+
+        List<HashMap<String, Object>> optionsList = new ArrayList<HashMap<String, Object>>();
+        for(Option op : survey.getOptions()) {
+            HashMap<String, Object> optionHashMap = new HashMap<String, Object>();
+            optionHashMap.put("id", op.getId());
+            optionHashMap.put("name", op.getName());
+            optionHashMap.put("votes", op.getVotes().size());
+            optionsList.add(optionHashMap);
+        }
+
+        VoteResponseBody responseBody = new VoteResponseBody(survey.getId(), survey.getTitle(), creator, optionsList, survey.getTotal_votes(), survey.getCreated_at());
+        return ResponseEntity.ok(responseBody);
     }
 }
