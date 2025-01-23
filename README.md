@@ -1,13 +1,5 @@
-# Survey System API
-
-This is an API for a survey system implemented in Java. The API allows users to register and log in to the system, as well as to create, delete, manage and vote in surveys. It is designed to be simple, scalable, and easy to integrate with other systems.
-
-## Features
-
-- **Create Surveys**: Allows users to create new surveys with various questions.
-- **Manage Surveys**: Provides endpoints for editing, deleting, and retrieving surveys.
-- **Respond to Surveys**: Allows users to submit responses to surveys.
-- **Authentication**: Secure API with authentication mechanisms to ensure that only authorized users can manage surveys.
+# Generic Poll System
+This Spring Boot application serves as the core of a Generic Poll System, housing its business logic and functioning as an API to enable interaction from the client.
 
 ## Technologies Used
 
