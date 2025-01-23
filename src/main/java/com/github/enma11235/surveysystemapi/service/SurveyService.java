@@ -1,24 +1,14 @@
 package com.github.enma11235.surveysystemapi.service;
 
-import com.github.enma11235.surveysystemapi.dto.model.SurveyCreator;
-import com.github.enma11235.surveysystemapi.dto.model.SurveyDTO;
-import com.github.enma11235.surveysystemapi.dto.model.SurveyOption;
-import com.github.enma11235.surveysystemapi.dto.response.GetSurveysResponseBody;
-import com.github.enma11235.surveysystemapi.exception.AuthException;
-import com.github.enma11235.surveysystemapi.exception.OptionNotFoundException;
-import com.github.enma11235.surveysystemapi.exception.SurveyNotFoundException;
-import com.github.enma11235.surveysystemapi.exception.UserNotFoundException;
-import com.github.enma11235.surveysystemapi.model.Option;
-import com.github.enma11235.surveysystemapi.model.Survey;
-import com.github.enma11235.surveysystemapi.model.User;
-import com.github.enma11235.surveysystemapi.model.Vote;
-import com.github.enma11235.surveysystemapi.repository.UserRepository;
+import com.github.enma11235.surveysystemapi.dto.model.*;
+import com.github.enma11235.surveysystemapi.dto.response.*;
+import com.github.enma11235.surveysystemapi.exception.*;
+import com.github.enma11235.surveysystemapi.model.*;
+import com.github.enma11235.surveysystemapi.repository.*;
 import com.github.enma11235.surveysystemapi.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
-import com.github.enma11235.surveysystemapi.repository.SurveyRepository;
 import com.github.enma11235.surveysystemapi.utils.DateDifferenceCalculator;
-import com.github.enma11235.surveysystemapi.repository.OptionRepository;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -30,13 +20,15 @@ public class SurveyService {
     private final OptionRepository optionRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
     @Autowired
-    public SurveyService(SurveyRepository surveyRepository, OptionRepository optionRepository, JwtTokenProvider jwtTokenProvider, UserRepository userRepository) {
+    public SurveyService(SurveyRepository surveyRepository, OptionRepository optionRepository, JwtTokenProvider jwtTokenProvider, UserRepository userRepository, VoteRepository voteRepository) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.surveyRepository = surveyRepository;
         this.userRepository = userRepository;
         this.optionRepository = optionRepository;
+        this.voteRepository = voteRepository;
     }
 
     //GET SURVEY
@@ -147,30 +139,47 @@ public class SurveyService {
         return returnList;
     }
 
-    //VOTE
-    public void vote(long survey_id, long option_id, String token) {
+    //ADD VOTE
+    public Survey vote(long option_id, String token) {
         boolean validToken = jwtTokenProvider.validateToken(token);
         if(validToken) {
             String nickname = jwtTokenProvider.getUsernameFromToken(token);
-            Optional<Survey> survey = surveyRepository.findById(survey_id);
-            if(survey.isPresent()) {
-                survey.get().setTotal_votes(survey.get().getTotal_votes() + 1);
-                List<Option> options = survey.get().getOptions();
-                Option option = null;
-                for(Option o : options) {
-                    if(o.getId() == option_id) {
-                        option = o;
+            Optional<User> user = userRepository.findByNickname(nickname);
+            Optional<Option> option = optionRepository.findById(option_id);
+            if(option.isPresent() && user.isPresent()) {
+                Survey survey = option.get().getSurvey();
+                //se verifica que el usuario no ha votado antes alguna opcion de la misma encuesta
+                boolean userAlreadyVoteAnOption = false;
+                List<Option> survey_options = survey.getOptions();
+                Option optWithVoteToRemove = null;
+                Vote voteToRemove = null;
+                for(Option opt : survey_options) {
+                    List<Vote> opt_votes = opt.getVotes();
+                    for(Vote vote : opt_votes) {
+                        if(vote.getUser().getNickname().equals(nickname)) {
+                            userAlreadyVoteAnOption = true;
+                            optWithVoteToRemove = opt;
+                            voteToRemove = vote;
+                        }
                     }
                 }
-                if(option != null) {
-                    Vote newVote = new Vote(survey.get().getUser(), option);
-                    List<Vote> option_votes = option.getVotes();
-                    option_votes.add(newVote);
-                    option.setVotes(option_votes);
-                    surveyRepository.save(survey.get());
-                    optionRepository.save(option);
+                if(userAlreadyVoteAnOption) {
+                    optWithVoteToRemove.getVotes().remove(voteToRemove); //intuitivamente, si elimino el voto de la lista de votos de la opcion, spring deberia eliminar el voto automaticamente
+                    optionRepository.save(optWithVoteToRemove);
+                    //como spring ha eliminado el voto, necesito crear uno nuevo
+                    Vote newVote = new Vote(user.get(), option.get());
+                    option.get().getVotes().add(newVote);
+                    voteRepository.save(newVote);
+                    optionRepository.save(option.get());
+                    return surveyRepository.save(survey);
                 } else {
-                    throw new OptionNotFoundException("the option id is not correct");
+                    //como spring ha eliminado el voto, necesito crear uno nuevo
+                    Vote newVote = new Vote(user.get(), option.get());
+                    option.get().getVotes().add(newVote);
+                    survey.setTotal_votes(survey.getTotal_votes() + 1);
+                    voteRepository.save(newVote);
+                    optionRepository.save(option.get());
+                    return surveyRepository.save(survey);
                 }
             } else {
                 throw new SurveyNotFoundException("The survey does not exist");
