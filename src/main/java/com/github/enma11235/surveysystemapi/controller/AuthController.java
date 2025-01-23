@@ -45,14 +45,9 @@ public class AuthController {
 
     //REGISTER
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody @Valid CreateUserRequestBody body) {
+    public ResponseEntity<CreateUserResponseBody> register(@RequestBody @Valid CreateUserRequestBody body) {
         CreateUserResponseBody responseBody = userService.createUser(body.getNickname(), body.getPassword());
-        Optional<User> user = userService.findUserByNickname(responseBody.getNickname());
-        String token = authService.authenticate(user.get().getNickname(), user.get().getPassword());
-        Map<String, Object> response = new HashMap<String, Object>();
-        response.put("token", token);
-        // Devolver la respuesta con los headers
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(responseBody);
     }
 
 }

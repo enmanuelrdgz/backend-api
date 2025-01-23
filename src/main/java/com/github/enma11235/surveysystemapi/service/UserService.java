@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 import com.github.enma11235.surveysystemapi.repository.UserRepository;
 
+import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,11 +23,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final AuthService authService;
 
     @Autowired
-    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, AuthService authService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
+        this.authService = authService;
     }
 
     //GET USER
@@ -59,15 +62,15 @@ public class UserService {
         if(userWithSameNickname.isPresent()) {
             throw new NicknameAlreadyInUseException("Nickname '" + nickname + "' is already taken.");
         } else {
-            ZonedDateTime now = ZonedDateTime.now(ZoneOffset.UTC);
-            String formattedDate = now.format(DateTimeFormatter.ISO_INSTANT);
+            LocalDate now = LocalDate.now();
 
             User user = new User();
             user.setNickname(nickname);
             user.setPassword(password);
-            user.setCreated_at(formattedDate);
+            user.setCreated_at(now.toString());
             User savedUser = userRepository.save(user);
-            return new CreateUserResponseBody(savedUser.getId(), savedUser.getNickname(), formattedDate);
+            String token = authService.authenticate(user.getNickname(), user.getPassword());
+            return new CreateUserResponseBody(savedUser.getId(), token);
         }
     }
 

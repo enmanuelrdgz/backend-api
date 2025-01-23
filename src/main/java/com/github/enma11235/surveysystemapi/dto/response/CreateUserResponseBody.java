@@ -2,13 +2,11 @@ package com.github.enma11235.surveysystemapi.dto.response;
 
 public class CreateUserResponseBody {
     private Long id;
-    private String nickname;
-    private String createdAt;
+    private String token;
 
-    public CreateUserResponseBody(Long id, String nickname, String createdAt) {
+    public CreateUserResponseBody(Long id, String token) {
         this.id = id;
-        this.nickname = nickname;
-        this.createdAt = createdAt;
+        this.token = token;
     }
 
     public Long getId() {
@@ -19,19 +17,12 @@ public class CreateUserResponseBody {
         this.id = id;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getToken() {
+        return token;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
 }
