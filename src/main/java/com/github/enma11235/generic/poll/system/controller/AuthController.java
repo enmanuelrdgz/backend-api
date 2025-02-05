@@ -3,6 +3,7 @@ package com.github.enma11235.generic.poll.system.controller;
 import com.github.enma11235.generic.poll.system.dto.request.CreateUserRequestBody;
 import com.github.enma11235.generic.poll.system.dto.request.LoginRequestBody;
 import com.github.enma11235.generic.poll.system.dto.response.CreateUserResponseBody;
+import com.github.enma11235.generic.poll.system.dto.response.LoginResponseBody;
 import com.github.enma11235.generic.poll.system.service.AuthService;
 import com.github.enma11235.generic.poll.system.service.UserService;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("auth")
 public class AuthController {
     private final UserService userService;
     private final AuthService authService;
@@ -30,14 +31,10 @@ public class AuthController {
 
     // LOG IN
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody @Valid LoginRequestBody body) {
+    public ResponseEntity<LoginResponseBody> login(@RequestBody @Valid LoginRequestBody body) {
         String token = authService.authenticate(body.getNickname(), body.getPassword());
-        Long id = userService.getUserId(token);
-        Map<String, Object> response = new HashMap<String, Object>();
-        response.put("token", token);
-        response.put("id", id);
-        // Devolver la respuesta con los headers
-        return ResponseEntity.ok(response);
+        LoginResponseBody responseBody = new LoginResponseBody("Login successful",  token);
+        return ResponseEntity.ok(responseBody);
     }
 
     //REGISTER
