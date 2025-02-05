@@ -1,5 +1,6 @@
 package com.github.enma11235.generic.poll.system.controller;
 
+import com.github.enma11235.generic.poll.system.dto.response.ResponseBody;
 import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.dto.response.ErrorResponse;
 import com.github.enma11235.generic.poll.system.exception.NicknameAlreadyInUseException;
@@ -39,9 +40,9 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthException.class)
-    public ResponseEntity<ErrorResponse> handleAuthException(AuthException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("AUTH_EXCEPTION", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    public ResponseEntity<ResponseBody> handleAuthException(AuthException e) {
+        ResponseBody responseBody = new ResponseBody(e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
