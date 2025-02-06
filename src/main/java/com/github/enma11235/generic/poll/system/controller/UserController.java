@@ -39,13 +39,6 @@ public class UserController {
         return ResponseEntity.ok(responseBody);
     }
 
-    // CREATE USER
-    @PostMapping
-    public ResponseEntity<CreateUserResponseBody> createUser(@RequestBody @Valid CreateUserRequestBody body) {
-        CreateUserResponseBody response = userService.createUser(body.getNickname(), body.getPassword());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
     //EDIT USER
     @PostMapping("/edit")
     public ResponseEntity<EditUserResponseBody> editUser(@RequestBody @Valid EditUserRequestBody body) {
@@ -54,31 +47,5 @@ public class UserController {
         EditUserResponseBody responseBody = new EditUserResponseBody(newToken);
         return ResponseEntity.ok(responseBody);
     }
-
-    // Endpoint to delete a user by ID
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<String> deleteUser(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
-//        if(authorizationHeader != null) {
-//            // Extraer el token
-//            String token = authorizationHeader.substring(7);
-//            Optional<User> user = userService.findUserById(id);
-//            if (user.isPresent()) {
-//                try {
-//                    String nickname = authController.getNicknameFromToken(token);
-//                    if(user.get().getNickname().equals(nickname)) {
-//                        userService.deleteUserById(id);
-//                        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//                    } else {
-//                        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//                    }
-//                } catch (Exception e) {
-//                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//                }
-//            } else {
-//                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//            }
-//        } else {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
 }
+

@@ -12,10 +12,12 @@ import java.util.Optional;
 public class AuthService {
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
-    public AuthService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
+    public AuthService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, UserService userService) {
         this.userRepository = userRepository;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
     }
 
     public String authenticate(String nickname, String password) {
@@ -31,6 +33,18 @@ public class AuthService {
             }
         } else {
             throw new AuthException("Invalid nickname");
+        }
+    }
+
+    public String signup(String nickname, String password) {
+        //verificar que el nickname esta disponible
+        Optional<User> user = userRepository.findByNickname(nickname);
+        if(user.isEmpty()) {
+            User newUser = userService.createUser(nickname, password);
+            //autenticamos al nuevo usuario
+            return authenticate(newUser.getNickname(), newUser.getPassword());
+        } else {
+            throw new AuthException("Nickname is not available");
         }
     }
 }

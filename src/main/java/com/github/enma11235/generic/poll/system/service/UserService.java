@@ -54,7 +54,7 @@ public class UserService {
     }
 
     //CREATE USER
-    public CreateUserResponseBody createUser(String nickname, String password) {
+    public User createUser(String nickname, String password) {
         Optional<User> userWithSameNickname = userRepository.findByNickname(nickname);
         if(userWithSameNickname.isPresent()) {
             throw new NicknameAlreadyInUseException("Nickname '" + nickname + "' is already taken.");
@@ -65,9 +65,7 @@ public class UserService {
             user.setNickname(nickname);
             user.setPassword(password);
             user.setCreated_at(now.toString());
-            User savedUser = userRepository.save(user);
-            String token = authService.authenticate(user.getNickname(), user.getPassword());
-            return new CreateUserResponseBody(savedUser.getId(), token);
+            return userRepository.save(user);
         }
     }
 
