@@ -1,18 +1,17 @@
 package com.github.enma11235.generic.poll.system.dto.response;
 
-import com.github.enma11235.generic.poll.system.dto.model.SurveyCreator;
-import com.github.enma11235.generic.poll.system.dto.model.SurveyOption;
+import com.github.enma11235.generic.poll.system.dto.model.OptionData;
 import java.util.List;
 
 public class CreateSurveyResponseBody {
     private Long id;
     private String title;
     private SurveyCreator creator;
-    private List<SurveyOption> options;
+    private List<OptionData> options;
     private String created_at;
     private int total_votes;
 
-    public CreateSurveyResponseBody(Long id, String title, SurveyCreator creator, List<SurveyOption> options, String created_at, int total_votes) {
+    public CreateSurveyResponseBody(Long id, String title, SurveyCreator creator, List<OptionData> options, String created_at, int total_votes) {
         this.id = id;
         this.title = title;
         this.creator = creator;
@@ -33,7 +32,7 @@ public class CreateSurveyResponseBody {
         return id;
     }
 
-    public List<SurveyOption> getOptions() {
+    public List<OptionData> getOptions() {
         return options;
     }
 
@@ -45,7 +44,7 @@ public class CreateSurveyResponseBody {
         this.created_at = created_at;
     }
 
-    public void setOptions(List<SurveyOption> options) {
+    public void setOptions(List<OptionData> options) {
         this.options = options;
     }
 

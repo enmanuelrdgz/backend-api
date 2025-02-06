@@ -10,10 +10,9 @@
 	</parent>
 	<groupId>quickpolls</groupId>
 	<artifactId>quickpolls</artifactId>
-	<version>1.0.1</version>
+	<version>2.0.0</version>
 	<name>QuickPolls</name>
-	<description>QuickPolls API</description>
-	<url>https://github.com/enmanuelrdgz/quickpolls-backend</url>
+	<url>https://github.com/enmanuelrdgz/quickpolls-core</url>
 	<licenses>
 		<license>
 			<name>MIT License</name>
@@ -23,15 +22,11 @@
 	</licenses>
 	<developers>
 		<developer>
-			<id>enmanuelrdgz</id>
 			<name>Enmanuel Rodriguez</name>
-			<email>enmaundostres@gmail.com</email>
 			<url>https://github.com/enmanuelrdgz</url>
 			<roles>
 				<role>Lead Developer</role>
-				<role>Maintainer</role>
 			</roles>
-			<timezone>-3</timezone>
 		</developer>
 	</developers>
 	<scm>

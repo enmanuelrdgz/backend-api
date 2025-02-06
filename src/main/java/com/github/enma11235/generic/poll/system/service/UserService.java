@@ -1,6 +1,6 @@
 package com.github.enma11235.generic.poll.system.service;
 
-import com.github.enma11235.generic.poll.system.dto.model.UserDTO;
+import com.github.enma11235.generic.poll.system.dto.model.UserData;
 import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.exception.NicknameAlreadyInUseException;
 import com.github.enma11235.generic.poll.system.exception.UserNotFoundException;
@@ -26,14 +26,14 @@ public class UserService {
     }
 
     //GET USER
-    public UserDTO getUserById(Long id, String token) {
+    public UserData getUserById(Long id, String token) {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
             boolean validToken = jwtTokenProvider.validateToken(token);
             if(validToken) {
                 String nickname = jwtTokenProvider.getUsernameFromToken(token);
                 if(user.get().getNickname().equals(nickname)) {
-                    return new UserDTO(user.get().getId(), user.get().getNickname(), user.get().getCreated_at(), user.get().getPassword(), user.get().getImg());
+                    return new UserData(user.get().getId(), user.get().getNickname(), user.get().getCreated_at(), user.get().getPassword(), user.get().getImg());
                 } else {
                     throw new AuthException("Not authorized to get this user info");
                 }

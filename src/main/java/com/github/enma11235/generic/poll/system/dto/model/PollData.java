@@ -1,22 +1,22 @@
-package com.github.enma11235.generic.poll.system.dto.response;
-
-import com.github.enma11235.generic.poll.system.dto.model.OptionData;
+package com.github.enma11235.generic.poll.system.dto.model;
 
 import java.util.List;
 
-public class GetSurveyResponseBody {
+public class PollData {
     private Long id;
     private String title;
-    private SurveyCreator creator;
+    private UserData user;
     private List<OptionData> options;
     private String created_at;
+    private int total_votes;
 
-    public GetSurveyResponseBody(Long id, String title, SurveyCreator creator, List<OptionData> options, String created_at) {
+    public PollData(Long id, String title, UserData user, List<OptionData> options, String created_at, int total_votes) {
         this.id = id;
         this.title = title;
-        this.creator = creator;
+        this.user = user;
         this.options = options;
         this.created_at = created_at;
+        this.total_votes = total_votes;
     }
 
     public Long getId() {
@@ -35,12 +35,12 @@ public class GetSurveyResponseBody {
         this.title = title;
     }
 
-    public SurveyCreator getCreator() {
-        return creator;
+    public UserData getUser() {
+        return user;
     }
 
-    public void setCreator(SurveyCreator creator) {
-        this.creator = creator;
+    public void setUser(UserData user) {
+        this.user = user;
     }
 
     public List<OptionData> getOptions() {
@@ -57,5 +57,13 @@ public class GetSurveyResponseBody {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public int getTotal_votes() {
+        return total_votes;
+    }
+
+    public void setTotal_votes(int total_votes) {
+        this.total_votes = total_votes;
     }
 }

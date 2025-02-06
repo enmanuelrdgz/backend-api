@@ -1,6 +1,6 @@
 package com.github.enma11235.generic.poll.system.controller;
 
-import com.github.enma11235.generic.poll.system.dto.model.UserDTO;
+import com.github.enma11235.generic.poll.system.dto.model.UserData;
 import com.github.enma11235.generic.poll.system.dto.request.EditUserRequestBody;
 import com.github.enma11235.generic.poll.system.dto.request.GetUserRequestBody;
 import com.github.enma11235.generic.poll.system.dto.response.EditUserResponseBody;
@@ -31,7 +31,7 @@ public class UserController {
     // GET USER
     @PostMapping("/{id}")
     public ResponseEntity<GetUserResponseBody> getUserById(@PathVariable Long id, @RequestBody @Valid GetUserRequestBody body) {
-        UserDTO user = userService.getUserById(id, body.getToken());
+        UserData user = userService.getUserById(id, body.getToken());
         GetUserResponseBody responseBody = new GetUserResponseBody(user.getId(), user.getNickname(), user.getPassword(), user.getImage());
         return ResponseEntity.ok(responseBody);
     }

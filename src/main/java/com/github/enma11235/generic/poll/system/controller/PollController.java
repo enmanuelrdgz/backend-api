@@ -1,9 +1,10 @@
 package com.github.enma11235.generic.poll.system.controller;
 
+import com.github.enma11235.generic.poll.system.dto.model.PollData;
 import com.github.enma11235.generic.poll.system.dto.request.CreateSurveyRequestBody;
-import com.github.enma11235.generic.poll.system.dto.model.SurveyDTO;
 import com.github.enma11235.generic.poll.system.dto.request.VoteRequestBody;
 import com.github.enma11235.generic.poll.system.dto.response.CreateSurveyResponseBody;
+import com.github.enma11235.generic.poll.system.dto.response.GetAllPollsResponseBody;
 import com.github.enma11235.generic.poll.system.dto.response.GetSurveyResponseBody;
 import com.github.enma11235.generic.poll.system.dto.response.GetSurveysResponseBody;
 import com.github.enma11235.generic.poll.system.dto.response.VoteResponseBody;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 @RestController
-@RequestMapping("/api/survey")
+@RequestMapping("/poll")
 public class PollController {
 
     private final PollService pollService;
@@ -50,10 +51,11 @@ public class PollController {
         return ResponseEntity.ok(responseBody);
     }
 
-    //GET ALL SURVEYS
+    //GET ALL POLLS
     @GetMapping
-    public ResponseEntity<List<GetSurveysResponseBody>> getSurveys() {
-        List<GetSurveysResponseBody> responseBody = pollService.getAllSurveys();
+    public ResponseEntity<GetAllPollsResponseBody> getAllPolls() {
+        List<PollData> polls = pollService.getAllPolls();
+        GetAllPollsResponseBody responseBody = new GetAllPollsResponseBody(polls);
         return ResponseEntity.ok(responseBody);
     }
 
