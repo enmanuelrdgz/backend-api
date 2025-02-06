@@ -1,7 +1,6 @@
 package com.github.enma11235.generic.poll.system.service;
 
 import com.github.enma11235.generic.poll.system.dto.model.UserDTO;
-import com.github.enma11235.generic.poll.system.dto.response.CreateUserResponseBody;
 import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.exception.NicknameAlreadyInUseException;
 import com.github.enma11235.generic.poll.system.exception.UserNotFoundException;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.github.enma11235.generic.poll.system.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,13 +18,11 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final AuthService authService;
 
     @Autowired
-    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, AuthService authService) {
+    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
-        this.authService = authService;
     }
 
     //GET USER
@@ -47,10 +43,6 @@ public class UserService {
         } else {
             throw new UserNotFoundException("There is no user with that id");
         }
-    }
-
-    public List<User> findAllUsers(){
-        return userRepository.findAll();
     }
 
     //CREATE USER
@@ -102,11 +94,12 @@ public class UserService {
         }
     }
 
-    public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+    public boolean doesUserExists(String nickname) {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        return user.isPresent();
     }
 
-    public Optional<User> findUserByNickname(String nickname) {
+    public Optional<User> getUserByNickname(String nickname) {
         return userRepository.findByNickname(nickname);
     }
 }
