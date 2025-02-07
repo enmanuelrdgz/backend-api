@@ -1,5 +1,5 @@
-# Generic Poll System
-This Spring Boot application serves as the core of a Generic Poll System, housing its business logic and functioning as an API to enable interaction from the client.
+# quickpolls-core (2.0.0)
+This is the backend of QuickPolls. It contains the business logic and serves as an API to enable interaction from the client.
 
 ## Technologies Used
 
@@ -9,28 +9,39 @@ This Spring Boot application serves as the core of a Generic Poll System, housin
 - **JWT (JSON Web Token)**: For authentication and authorization.
 - **PostgreSQL**: Relational database used for storing user and survey data.
 
-## Endpoints
+## Prerequisites
 
-### Survey Endpoints
+Before running the application, ensure you have the following installed:
 
-- `POST api/survey` - Create a new survey.
-- `GET api/survey` - Retrieve a list of all surveys.
-- `GET api/survey/{id}` - Get details of a specific survey by ID.
-- `DELETE api/survey/{id}` - Delete a survey by ID.
+- **JDK** 21
+- **Maven** (v3.8.7)
+- **Postgres** (v16.6)
 
-### User Endpoints
-
-- `POST api/user` - Register a new user into the system.
-- `GET api/user` - Retrieve a list of all users.
-- `GET api/user/{id}` - Get details of a specific user by ID.
-- `DELETE api/user/{id}` - Delete a user by ID.
-
-### Authentication
-
-- `POST /auth/` - Log in and receive a JWT token for authenticated access.
-
+> ⚠️ **Important** ⚠️  
+> There must be a database called **quickpolls**  
+> User: quickpolls  
+> Password: quickpolls
 ## Installation
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/survey-api.git
+   git clone https://github.com/enmanuelrdgz/quickpolls-core.git
+   cd quickpolls-core
+   ```
+
+2. Install dependencies:
+   ```bash
+   mvn install
+   ```
+
+3. Compile and package the application:
+   ```bash
+   mvn clean package
+   ```
+
+4. Run the application:
+   ```bash
+   java -jar ./target/quickpolls-2.0.0.jar
+   ```
+> Now the application must be running and listening in port 8080
+
