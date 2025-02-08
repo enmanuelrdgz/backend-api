@@ -33,7 +33,7 @@ public class UserService {
             if(validToken) {
                 String nickname = jwtTokenProvider.getUsernameFromToken(token);
                 if(user.get().getNickname().equals(nickname)) {
-                    return new UserData(user.get().getId(), user.get().getNickname(), user.get().getCreated_at(), user.get().getPassword(), user.get().getImg());
+                    return new UserData(user.get().getId(), user.get().getNickname(), user.get().getImg());
                 } else {
                     throw new AuthException("Not authorized to get this user info");
                 }

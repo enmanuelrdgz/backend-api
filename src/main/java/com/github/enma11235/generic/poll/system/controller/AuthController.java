@@ -1,12 +1,13 @@
 package com.github.enma11235.generic.poll.system.controller;
 
 import com.github.enma11235.generic.poll.system.dto.request.AuthRequestBody;
-import com.github.enma11235.generic.poll.system.dto.response.AuthResponseBody;
 import com.github.enma11235.generic.poll.system.service.AuthService;
+import com.github.enma11235.generic.poll.system.dto.response.ResponseBody;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,18 +23,24 @@ public class AuthController {
 
     // SIGN IN
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponseBody> signIn(@RequestBody @Valid AuthRequestBody body) {
+    public ResponseEntity<ResponseBody> signIn(@RequestBody @Valid AuthRequestBody body) {
         String token = authService.signIn(body.getNickname(), body.getPassword());
-        AuthResponseBody responseBody = new AuthResponseBody("Signed in successfully",  token);
-        return ResponseEntity.ok(responseBody);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", token);
+        headers.add("Access-Control-Expose-Headers", "token");
+        ResponseBody responseBody = new ResponseBody("Signed in successfully");
+        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 
     //SIGN UP
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponseBody> signUp(@RequestBody @Valid AuthRequestBody body) {
+    public ResponseEntity<ResponseBody> signUp(@RequestBody @Valid AuthRequestBody body) {
         String token = authService.signUp(body.getNickname(), body.getPassword());
-        AuthResponseBody responseBody = new AuthResponseBody("Signed up successfully",  token);
-        return ResponseEntity.ok(responseBody);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", token);
+        headers.add("Access-Control-Expose-Headers", "token");
+        ResponseBody responseBody = new ResponseBody("Signed up successfully");
+        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 
 }

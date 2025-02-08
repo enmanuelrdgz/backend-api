@@ -2,7 +2,6 @@ package com.github.enma11235.generic.poll.system.controller;
 
 import com.github.enma11235.generic.poll.system.dto.response.ResponseBody;
 import com.github.enma11235.generic.poll.system.exception.AuthException;
-import com.github.enma11235.generic.poll.system.dto.response.ErrorResponse;
 import com.github.enma11235.generic.poll.system.exception.NicknameAlreadyInUseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NicknameAlreadyInUseException.class)
-    public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(NicknameAlreadyInUseException ex) {
-        ErrorResponse errorResponse = new ErrorResponse("NICKNAME_ALREADY_IN_USE", ex.getMessage());
+    public ResponseEntity<ResponseBody> handleUserAlreadyExistsException(NicknameAlreadyInUseException ex) {
+        ResponseBody errorResponse = new ResponseBody(ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 

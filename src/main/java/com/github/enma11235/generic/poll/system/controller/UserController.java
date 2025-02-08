@@ -4,7 +4,6 @@ import com.github.enma11235.generic.poll.system.dto.model.UserData;
 import com.github.enma11235.generic.poll.system.dto.request.EditUserRequestBody;
 import com.github.enma11235.generic.poll.system.dto.request.GetUserRequestBody;
 import com.github.enma11235.generic.poll.system.dto.response.EditUserResponseBody;
-import com.github.enma11235.generic.poll.system.dto.response.GetUserResponseBody;
 import com.github.enma11235.generic.poll.system.model.User;
 import com.github.enma11235.generic.poll.system.service.AuthService;
 import com.github.enma11235.generic.poll.system.service.UserService;
@@ -26,14 +25,6 @@ public class UserController {
         this.userService = userService;
         this.authController = authController;
         this.authService = authService;
-    }
-
-    // GET USER
-    @PostMapping("/{id}")
-    public ResponseEntity<GetUserResponseBody> getUserById(@PathVariable Long id, @RequestBody @Valid GetUserRequestBody body) {
-        UserData user = userService.getUserById(id, body.getToken());
-        GetUserResponseBody responseBody = new GetUserResponseBody(user.getId(), user.getNickname(), user.getPassword(), user.getImage());
-        return ResponseEntity.ok(responseBody);
     }
 
     //EDIT USER

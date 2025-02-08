@@ -3,7 +3,6 @@ package com.github.enma11235.generic.poll.system.service;
 import com.github.enma11235.generic.poll.system.dto.model.OptionData;
 import com.github.enma11235.generic.poll.system.dto.model.PollData;
 import com.github.enma11235.generic.poll.system.dto.model.UserData;
-import com.github.enma11235.generic.poll.system.dto.response.GetSurveysResponseBody;
 import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.exception.SurveyNotFoundException;
 import com.github.enma11235.generic.poll.system.exception.UserNotFoundException;

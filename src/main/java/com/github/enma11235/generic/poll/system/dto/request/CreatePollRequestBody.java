@@ -15,17 +15,6 @@ public class CreatePollRequestBody {
     @NotNull
     private List<String> options;
 
-    @NotBlank(message = "Token is required")
-    private String token;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
     public String getTitle() { return title; }
 
     public void setTitle(String title) { this.title = title;}
