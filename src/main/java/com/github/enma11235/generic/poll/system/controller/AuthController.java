@@ -27,6 +27,7 @@ public class AuthController {
         String token = authService.signIn(body.getNickname(), body.getPassword());
         HttpHeaders headers = new HttpHeaders();
         headers.add("token", token);
+        headers.add("nickname", body.getNickname());
         headers.add("Access-Control-Expose-Headers", "token");
         ResponseBody responseBody = new ResponseBody("Signed in successfully");
         return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
@@ -38,6 +39,7 @@ public class AuthController {
         String token = authService.signUp(body.getNickname(), body.getPassword());
         HttpHeaders headers = new HttpHeaders();
         headers.add("token", token);
+        headers.add("nickname", body.getNickname());
         headers.add("Access-Control-Expose-Headers", "token");
         ResponseBody responseBody = new ResponseBody("Signed up successfully");
         return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
