@@ -1,7 +1,6 @@
 package com.github.enma11235.generic.poll.system.service;
 
-import com.github.enma11235.generic.poll.system.dto.model.UserDTO;
-import com.github.enma11235.generic.poll.system.dto.response.CreateUserResponseBody;
+import com.github.enma11235.generic.poll.system.dto.model.UserData;
 import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.exception.NicknameAlreadyInUseException;
 import com.github.enma11235.generic.poll.system.exception.UserNotFoundException;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.github.enma11235.generic.poll.system.repository.UserRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,24 +18,22 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final AuthService authService;
 
     @Autowired
-    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider, AuthService authService) {
+    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
-        this.authService = authService;
     }
 
     //GET USER
-    public UserDTO getUserById(Long id, String token) {
+    public UserData getUserById(Long id, String token) {
         Optional<User> user = userRepository.findById(id);
         if(user.isPresent()) {
             boolean validToken = jwtTokenProvider.validateToken(token);
             if(validToken) {
                 String nickname = jwtTokenProvider.getUsernameFromToken(token);
                 if(user.get().getNickname().equals(nickname)) {
-                    return new UserDTO(user.get().getId(), user.get().getNickname(), user.get().getCreated_at(), user.get().getPassword(), user.get().getImg());
+                    return new UserData(user.get().getId(), user.get().getNickname(), user.get().getImg());
                 } else {
                     throw new AuthException("Not authorized to get this user info");
                 }
@@ -49,12 +45,8 @@ public class UserService {
         }
     }
 
-    public List<User> findAllUsers(){
-        return userRepository.findAll();
-    }
-
     //CREATE USER
-    public CreateUserResponseBody createUser(String nickname, String password) {
+    public User createUser(String nickname, String password) {
         Optional<User> userWithSameNickname = userRepository.findByNickname(nickname);
         if(userWithSameNickname.isPresent()) {
             throw new NicknameAlreadyInUseException("Nickname '" + nickname + "' is already taken.");
@@ -65,9 +57,7 @@ public class UserService {
             user.setNickname(nickname);
             user.setPassword(password);
             user.setCreated_at(now.toString());
-            User savedUser = userRepository.save(user);
-            String token = authService.authenticate(user.getNickname(), user.getPassword());
-            return new CreateUserResponseBody(savedUser.getId(), token);
+            return userRepository.save(user);
         }
     }
 
@@ -104,11 +94,12 @@ public class UserService {
         }
     }
 
-    public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
+    public boolean doesUserExists(String nickname) {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        return user.isPresent();
     }
 
-    public Optional<User> findUserByNickname(String nickname) {
+    public Optional<User> getUserByNickname(String nickname) {
         return userRepository.findByNickname(nickname);
     }
 }

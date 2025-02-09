@@ -8,38 +8,17 @@
 		<version>3.4.0</version>
 		<relativePath/>
 	</parent>
-	<groupId>com.github.enma11235</groupId>
-	<artifactId>generic-poll-system</artifactId>
-	<version>1.0.1</version>
-	<name>Generic Poll System</name>
-	<description>Generic Poll System build with Spring Framework</description>
-	<url>https://github.com/enma11235/generic-poll-system</url>
-	<licenses>
-		<license>
-			<name>MIT License</name>
-			<url>https://opensource.org/licenses/MIT</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+	<groupId>quickpolls</groupId>
+	<artifactId>quickpolls-core</artifactId>
+	<version>2.0.0</version>
+	<name>QuickPolls Core</name>
+	<url>https://github.com/enmanuelrdgz/quickpolls-core</url>
 	<developers>
 		<developer>
-			<id>enma11235</id>
 			<name>Enmanuel Rodriguez</name>
-			<email>enmaundostres@gmail.com</email>
-			<url>https://github.com/enma11235</url>
-			<roles>
-				<role>Lead Developer</role>
-				<role>Maintainer</role>
-			</roles>
-			<timezone>-3</timezone>
+			<url>https://github.com/enmanuelrdgz</url>
 		</developer>
 	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
 	<properties>
 		<java.version>21</java.version>
 		<maven.compiler.source>21</maven.compiler.source>

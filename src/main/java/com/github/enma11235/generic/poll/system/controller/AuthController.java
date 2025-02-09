@@ -1,47 +1,48 @@
 package com.github.enma11235.generic.poll.system.controller;
 
-import com.github.enma11235.generic.poll.system.dto.request.CreateUserRequestBody;
-import com.github.enma11235.generic.poll.system.dto.request.LoginRequestBody;
-import com.github.enma11235.generic.poll.system.dto.response.CreateUserResponseBody;
-import com.github.enma11235.generic.poll.system.dto.response.LoginResponseBody;
+import com.github.enma11235.generic.poll.system.dto.request.AuthRequestBody;
 import com.github.enma11235.generic.poll.system.service.AuthService;
-import com.github.enma11235.generic.poll.system.service.UserService;
+import com.github.enma11235.generic.poll.system.dto.response.ResponseBody;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
 
 @RestController
 @RequestMapping("auth")
 public class AuthController {
-    private final UserService userService;
     private final AuthService authService;
 
-
     @Autowired
-    public AuthController(UserService userService, AuthService authService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
-    // LOG IN
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseBody> login(@RequestBody @Valid LoginRequestBody body) {
-        String token = authService.authenticate(body.getNickname(), body.getPassword());
-        LoginResponseBody responseBody = new LoginResponseBody("Login successful",  token);
-        return ResponseEntity.ok(responseBody);
+    // SIGN IN
+    @PostMapping("/signin")
+    public ResponseEntity<ResponseBody> signIn(@RequestBody @Valid AuthRequestBody body) {
+        String token = authService.signIn(body.getNickname(), body.getPassword());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", token);
+        headers.add("nickname", body.getNickname());
+        headers.add("Access-Control-Expose-Headers", "token");
+        ResponseBody responseBody = new ResponseBody("Signed in successfully");
+        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 
-    //REGISTER
-    @PostMapping("/register")
-    public ResponseEntity<CreateUserResponseBody> register(@RequestBody @Valid CreateUserRequestBody body) {
-        CreateUserResponseBody responseBody = userService.createUser(body.getNickname(), body.getPassword());
-        return ResponseEntity.ok(responseBody);
+    //SIGN UP
+    @PostMapping("/signup")
+    public ResponseEntity<ResponseBody> signUp(@RequestBody @Valid AuthRequestBody body) {
+        String token = authService.signUp(body.getNickname(), body.getPassword());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("token", token);
+        headers.add("nickname", body.getNickname());
+        headers.add("Access-Control-Expose-Headers", "token");
+        ResponseBody responseBody = new ResponseBody("Signed up successfully");
+        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 
 }
