@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.*;
 
-public class CreateSurveyRequestBody {
+public class CreatePollRequestBody {
 
     @NotBlank(message = "Title is required")
     private String title;
@@ -14,17 +14,6 @@ public class CreateSurveyRequestBody {
     @NotEmpty(message = "Options are required")
     @NotNull
     private List<String> options;
-
-    @NotBlank(message = "Token is required")
-    private String token;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public String getTitle() { return title; }
 

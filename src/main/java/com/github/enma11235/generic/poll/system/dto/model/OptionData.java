@@ -1,11 +1,11 @@
 package com.github.enma11235.generic.poll.system.dto.model;
 
-public class SurveyOption {
+public class OptionData {
     private Long id;
     private String name;
     private int votes;
 
-    public SurveyOption(Long id, String name, int votes) {
+    public OptionData(Long id, String name, int votes) {
         this.id = id;
         this.name = name;
         this.votes = votes;

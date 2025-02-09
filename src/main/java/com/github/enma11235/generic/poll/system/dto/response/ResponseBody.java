@@ -1,21 +1,13 @@
 package com.github.enma11235.generic.poll.system.dto.response;
 
-public class ErrorResponse {
-    private String error;
+public class ResponseBody {
     private String message;
 
-    public ErrorResponse(String error, String message) {
-        this.error = error;
+    public ResponseBody(String message) {
         this.message = message;
     }
 
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
+    public ResponseBody(){}
 
     public String getMessage() {
         return message;
