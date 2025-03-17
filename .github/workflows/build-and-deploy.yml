@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Build And Deploy
 
 on:
   push:
@@ -19,11 +19,11 @@ jobs:
 
     # 3️⃣ Construir la imagen de Docker
     - name: Build Docker Image
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }} .
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }} .
 
     # 4️⃣ Subir la imagen a Docker Hub
     - name: Push Docker Image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }}
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
 
     # 5️⃣ Desplegar en el servidor
     - name: Deploy to Production Server
@@ -34,7 +34,7 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p "${{ secrets.DOCKERHUB_PASSWORD }}"
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }}
-          docker stop api-container || true
-          docker rm api-container || true
-          docker run -d --name api-container -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }}
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
+          docker stop backend-api || true
+          docker rm backend-api || true
+          docker run -d --name backend-api -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
