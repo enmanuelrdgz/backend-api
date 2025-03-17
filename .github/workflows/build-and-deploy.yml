@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  build-and-push-image:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,7 +24,11 @@ jobs:
     # 4️⃣ Subir la imagen a Docker Hub
     - name: Push Docker Image
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
+      
+  deploy-on-server:
+    runs-on: ubuntu-latest
 
+    steps:
     # 5️⃣ Desplegar en el servidor
     - name: Deploy to Production Server
       uses: appleboy/ssh-action@v0.1.10
@@ -33,8 +37,8 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p "${{ secrets.DOCKERHUB_PASSWORD }}"
-          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
-          docker stop backend-api || true
-          docker rm backend-api || true
-          docker run -d --name backend-api -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
+          sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p "${{ secrets.DOCKERHUB_PASSWORD }}"
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
+          sudo docker stop backend-api || true
+          sudo docker rm backend-api || true
+          sudo docker run -d --name backend-api -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/backend-api:${{ github.sha }}
