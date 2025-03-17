@@ -3,12 +3,38 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-jobs:
 
-  build:
+jobs:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag api-image:${{ github.sha }}
+    # 1️⃣ Clonar el código del repositorio
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # 2️⃣ Iniciar sesión en Docker Hub
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+    # 3️⃣ Construir la imagen de Docker
+    - name: Build Docker Image
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }} .
+
+    # 4️⃣ Subir la imagen a Docker Hub
+    - name: Push Docker Image
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }}
+
+    # 5️⃣ Desplegar en el servidor
+    - name: Deploy to Production Server
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p "${{ secrets.DOCKERHUB_PASSWORD }}"
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }}
+          docker stop api-container || true
+          docker rm api-container || true
+          docker run -d --name api-container -p 80:3000 ${{ secrets.DOCKERHUB_USERNAME }}/api-image:${{ github.sha }}
