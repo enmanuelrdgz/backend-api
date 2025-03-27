@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
         if (user.isPresent()) {
             boolean validToken = jwtUtils.validateToken(token);
             if (validToken) {
-                String nickname = jwtUtils.getUsernameFromToken(token);
+                String nickname = jwtUtils.extractUsername(token);
                 if (user.get().getUsername().equals(nickname)) {
                     return new UserData(user.get().getId(), user.get().getUsername());
                 } else {
@@ -67,7 +67,7 @@ public class UserService implements UserDetailsService {
     public long getUserId(String token) {
         boolean validToken = jwtUtils.validateToken(token);
         if (validToken) {
-            String nickname = jwtUtils.getUsernameFromToken(token);
+            String nickname = jwtUtils.extractUsername(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             if (user.isPresent()) {
                 return user.get().getId();
@@ -81,7 +81,7 @@ public class UserService implements UserDetailsService {
     public User editUser(String new_nickname, String new_password, String token) {
         boolean validToken = jwtUtils.validateToken(token);
         if (validToken) {
-            String nickname = jwtUtils.getUsernameFromToken(token);
+            String nickname = jwtUtils.extractUsername(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             if (user.isPresent()) {
                 user.get().setUsername(new_nickname);

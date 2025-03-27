@@ -3,15 +3,19 @@ package com.github.enma11235.generic.poll.system.service;
 import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.model.User;
 import com.github.enma11235.generic.poll.system.utils.JwtUtils;
+import io.jsonwebtoken.Jwt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public class AuthService {
+
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
+    @Autowired
     public AuthService(JwtUtils jwtUtils, UserService userService) {
         this.jwtUtils = jwtUtils;
         this.userService = userService;

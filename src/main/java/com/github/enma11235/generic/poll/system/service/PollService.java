@@ -43,7 +43,7 @@ public class PollService {
     public void createPoll(String title, List<String> options, String token) {
         boolean validToken = jwtUtils.validateToken(token);
         if(validToken) {
-            String nickname = jwtUtils.getUsernameFromToken(token);
+            String nickname = jwtUtils.extractUsername(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             if(user.isPresent()) {
                 LocalDate date = LocalDate.now();
@@ -94,7 +94,7 @@ public class PollService {
     public Poll vote(long option_id, String token) {
         boolean validToken = jwtUtils.validateToken(token);
         if(validToken) {
-            String nickname = jwtUtils.getUsernameFromToken(token);
+            String nickname = jwtUtils.extractUsername(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             Optional<Option> option = optionRepository.findById(option_id);
             if(option.isPresent() && user.isPresent()) {

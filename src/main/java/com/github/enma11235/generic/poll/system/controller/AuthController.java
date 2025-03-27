@@ -1,48 +1,62 @@
 package com.github.enma11235.generic.poll.system.controller;
 
 import com.github.enma11235.generic.poll.system.dto.request.AuthRequestBody;
-import com.github.enma11235.generic.poll.system.service.AuthService;
-import com.github.enma11235.generic.poll.system.dto.response.ResponseBody;
+import com.github.enma11235.generic.poll.system.model.User;
 
+import com.github.enma11235.generic.poll.system.service.UserService;
+import com.github.enma11235.generic.poll.system.utils.JwtUtils;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping("/")
 public class AuthController {
-    private final AuthService authService;
+
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
     }
 
-    // SIGN IN
-    @PostMapping("/signin")
-    public ResponseEntity<ResponseBody> signIn(@RequestBody @Valid AuthRequestBody body) {
-        String token = authService.signIn(body.getNickname(), body.getPassword());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("token", token);
-        headers.add("nickname", body.getNickname());
-        headers.add("Access-Control-Expose-Headers", "token");
-        ResponseBody responseBody = new ResponseBody("Signed in successfully");
-        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid AuthRequestBody body) {
+        Authentication authenticationRequest = new UsernamePasswordAuthenticationToken(body.getNickname(), body.getPassword());
+
+        try {
+            Authentication authentication = authenticationManager.authenticate(authenticationRequest);
+            String token = jwtUtils.generateToken((User) authentication.getPrincipal());
+            HttpHeaders headers = new HttpHeaders();
+            headers.set(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+            return new ResponseEntity<>("Login Successful", headers, HttpStatus.OK);
+        } catch (AuthenticationException ex) {
+            //arreglar esto
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
-    //SIGN UP
-    @PostMapping("/signup")
-    public ResponseEntity<ResponseBody> signUp(@RequestBody @Valid AuthRequestBody body) {
-        String token = authService.signUp(body.getNickname(), body.getPassword());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("token", token);
-        headers.add("nickname", body.getNickname());
-        headers.add("Access-Control-Expose-Headers", "token");
-        ResponseBody responseBody = new ResponseBody("Signed up successfully");
-        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
+    @GetMapping("/status")
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody @Valid AuthRequestBody body) {
+        userService.createUser(body.getNickname(), body.getPassword());
+        return new ResponseEntity<>("Register Successful", HttpStatus.OK);
     }
 
+    //Implementar el endpoint "logout"
+
+    //implementar el endpoint "status"
 }

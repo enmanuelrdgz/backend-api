@@ -17,11 +17,11 @@ import java.util.*;
 @Component
 public class JwtUtils {
 
-    @Value("${JWT_SECRET_KEY}")
-    public String SECRET_KEY;
+    //@Value("${JWT_SECRET_KEY}")
+    public String SECRET_KEY = "21o4OMDTMl7TB5NXJLxxDZfOjiL+xQiREnDrcoxtiHw=";
 
-    @Value("${JWT_EXPIRATION}")
-    private long tokenExpirationTime;
+    //@Value("${JWT_EXPIRATION}")
+    private long tokenExpirationTime = 3600;
 
     public SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
