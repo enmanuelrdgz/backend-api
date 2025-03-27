@@ -72,6 +72,10 @@ public class User implements UserDetails {
         return created_at;
     }
 
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
+    }
+
     @Override
     public Collection<Role> getAuthorities() {
         return roles;
@@ -85,6 +89,10 @@ public class User implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

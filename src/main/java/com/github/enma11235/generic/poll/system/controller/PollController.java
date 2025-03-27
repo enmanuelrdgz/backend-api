@@ -52,7 +52,7 @@ public class PollController {
     public ResponseEntity<AddVoteResponseBody> addVote(@RequestBody AddVoteRequestBody body, @RequestHeader("token") String token) {
         Poll poll = pollService.vote(body.getOption_id(), token);
 
-        UserData userData = new UserData(poll.getUser().getId(), poll.getUser().getNickname(), poll.getUser().getImg());
+        UserData userData = new UserData(poll.getUser().getId(), poll.getUser().getUsername());
         List<OptionData> optionsData = new ArrayList<>();
         for(Option o : poll.getOptions()) {
             optionsData.add(new OptionData(o.getId(), o.getName(), o.getVotes().size()));

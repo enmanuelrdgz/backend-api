@@ -44,7 +44,7 @@ public class PollService {
         boolean validToken = jwtTokenProvider.validateToken(token);
         if(validToken) {
             String nickname = jwtTokenProvider.getUsernameFromToken(token);
-            Optional<User> user = userRepository.findByNickname(nickname);
+            Optional<User> user = userRepository.findByUsername(nickname);
             if(user.isPresent()) {
                 LocalDate date = LocalDate.now();
                 String dateString = date.toString();
@@ -78,7 +78,7 @@ public class PollService {
         List<PollData> returnList = new ArrayList<PollData>();
 
         for(Poll p : polls) {
-            UserData userData = new UserData(p.getUser().getId(), p.getUser().getNickname(), p.getUser().getImg());
+            UserData userData = new UserData(p.getUser().getId(), p.getUser().getUsername());
             List<Option> options = p.getOptions();
             List<OptionData> optionsData = new ArrayList<OptionData>();
             for(Option o : options) {
@@ -95,7 +95,7 @@ public class PollService {
         boolean validToken = jwtTokenProvider.validateToken(token);
         if(validToken) {
             String nickname = jwtTokenProvider.getUsernameFromToken(token);
-            Optional<User> user = userRepository.findByNickname(nickname);
+            Optional<User> user = userRepository.findByUsername(nickname);
             Optional<Option> option = optionRepository.findById(option_id);
             if(option.isPresent() && user.isPresent()) {
                 Poll poll = option.get().getSurvey();
@@ -107,7 +107,7 @@ public class PollService {
                 for(Option opt : survey_options) {
                     List<Vote> opt_votes = opt.getVotes();
                     for(Vote vote : opt_votes) {
-                        if(vote.getUser().getNickname().equals(nickname)) {
+                        if(vote.getUser().getUsername().equals(nickname)) {
                             userAlreadyVoteAnOption = true;
                             optWithVoteToRemove = opt;
                             voteToRemove = vote;

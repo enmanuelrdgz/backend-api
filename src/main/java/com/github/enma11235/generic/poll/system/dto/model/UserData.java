@@ -3,20 +3,10 @@ package com.github.enma11235.generic.poll.system.dto.model;
 public class UserData {
     private Long id;
     private String nickname;
-    private String image;
 
-    public UserData(Long id, String nickname, String image) {
+    public UserData(Long id, String nickname) {
         this.id = id;
         this.nickname = nickname;
-        this.image = image;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public Long getId() {
