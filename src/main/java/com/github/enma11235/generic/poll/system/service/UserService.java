@@ -5,7 +5,7 @@ import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.exception.NicknameAlreadyInUseException;
 import com.github.enma11235.generic.poll.system.exception.UserNotFoundException;
 import com.github.enma11235.generic.poll.system.model.User;
-import com.github.enma11235.generic.poll.system.utils.JwtTokenProvider;
+import com.github.enma11235.generic.poll.system.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,11 +20,11 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public UserService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public UserService(UserRepository userRepository, JwtUtils jwtUtils) {
+        this.jwtUtils = jwtUtils;
         this.userRepository = userRepository;
     }
 
@@ -32,9 +32,9 @@ public class UserService implements UserDetailsService {
     public UserData getUserById(Long id, String token) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            boolean validToken = jwtTokenProvider.validateToken(token);
+            boolean validToken = jwtUtils.validateToken(token);
             if (validToken) {
-                String nickname = jwtTokenProvider.getUsernameFromToken(token);
+                String nickname = jwtUtils.getUsernameFromToken(token);
                 if (user.get().getUsername().equals(nickname)) {
                     return new UserData(user.get().getId(), user.get().getUsername());
                 } else {
@@ -65,9 +65,9 @@ public class UserService implements UserDetailsService {
     }
 
     public long getUserId(String token) {
-        boolean validToken = jwtTokenProvider.validateToken(token);
+        boolean validToken = jwtUtils.validateToken(token);
         if (validToken) {
-            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            String nickname = jwtUtils.getUsernameFromToken(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             if (user.isPresent()) {
                 return user.get().getId();
@@ -79,9 +79,9 @@ public class UserService implements UserDetailsService {
     }
 
     public User editUser(String new_nickname, String new_password, String token) {
-        boolean validToken = jwtTokenProvider.validateToken(token);
+        boolean validToken = jwtUtils.validateToken(token);
         if (validToken) {
-            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            String nickname = jwtUtils.getUsernameFromToken(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             if (user.isPresent()) {
                 user.get().setUsername(new_nickname);

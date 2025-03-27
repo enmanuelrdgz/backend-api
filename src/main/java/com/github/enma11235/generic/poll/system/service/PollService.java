@@ -14,7 +14,7 @@ import com.github.enma11235.generic.poll.system.repository.OptionRepository;
 import com.github.enma11235.generic.poll.system.repository.PollRepository;
 import com.github.enma11235.generic.poll.system.repository.UserRepository;
 import com.github.enma11235.generic.poll.system.repository.VoteRepository;
-import com.github.enma11235.generic.poll.system.utils.JwtTokenProvider;
+import com.github.enma11235.generic.poll.system.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +26,13 @@ public class PollService {
 
     private final PollRepository pollRepository;
     private final OptionRepository optionRepository;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
     private final VoteRepository voteRepository;
 
     @Autowired
-    public PollService(PollRepository pollRepository, OptionRepository optionRepository, JwtTokenProvider jwtTokenProvider, UserRepository userRepository, VoteRepository voteRepository) {
-        this.jwtTokenProvider = jwtTokenProvider;
+    public PollService(PollRepository pollRepository, OptionRepository optionRepository, JwtUtils jwtUtils, UserRepository userRepository, VoteRepository voteRepository) {
+        this.jwtUtils = jwtUtils;
         this.pollRepository = pollRepository;
         this.userRepository = userRepository;
         this.optionRepository = optionRepository;
@@ -41,9 +41,9 @@ public class PollService {
 
     //CREATE POLL
     public void createPoll(String title, List<String> options, String token) {
-        boolean validToken = jwtTokenProvider.validateToken(token);
+        boolean validToken = jwtUtils.validateToken(token);
         if(validToken) {
-            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            String nickname = jwtUtils.getUsernameFromToken(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             if(user.isPresent()) {
                 LocalDate date = LocalDate.now();
@@ -92,9 +92,9 @@ public class PollService {
 
     //ADD VOTE
     public Poll vote(long option_id, String token) {
-        boolean validToken = jwtTokenProvider.validateToken(token);
+        boolean validToken = jwtUtils.validateToken(token);
         if(validToken) {
-            String nickname = jwtTokenProvider.getUsernameFromToken(token);
+            String nickname = jwtUtils.getUsernameFromToken(token);
             Optional<User> user = userRepository.findByUsername(nickname);
             Optional<Option> option = optionRepository.findById(option_id);
             if(option.isPresent() && user.isPresent()) {
