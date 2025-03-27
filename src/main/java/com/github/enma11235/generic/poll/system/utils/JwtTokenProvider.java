@@ -1,4 +1,4 @@
-package com.github.enma11235.generic.poll.system.security;
+package com.github.enma11235.generic.poll.system.utils;
 
 import com.github.enma11235.generic.poll.system.model.User;
 import io.jsonwebtoken.Claims;

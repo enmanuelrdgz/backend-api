@@ -14,7 +14,7 @@ import com.github.enma11235.generic.poll.system.repository.OptionRepository;
 import com.github.enma11235.generic.poll.system.repository.PollRepository;
 import com.github.enma11235.generic.poll.system.repository.UserRepository;
 import com.github.enma11235.generic.poll.system.repository.VoteRepository;
-import com.github.enma11235.generic.poll.system.security.JwtTokenProvider;
+import com.github.enma11235.generic.poll.system.utils.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.Service;
 

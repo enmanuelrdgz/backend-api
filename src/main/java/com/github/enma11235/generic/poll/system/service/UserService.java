@@ -5,7 +5,7 @@ import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.exception.NicknameAlreadyInUseException;
 import com.github.enma11235.generic.poll.system.exception.UserNotFoundException;
 import com.github.enma11235.generic.poll.system.model.User;
-import com.github.enma11235.generic.poll.system.security.JwtTokenProvider;
+import com.github.enma11235.generic.poll.system.utils.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

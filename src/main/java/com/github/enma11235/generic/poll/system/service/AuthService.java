@@ -2,7 +2,7 @@ package com.github.enma11235.generic.poll.system.service;
 
 import com.github.enma11235.generic.poll.system.exception.AuthException;
 import com.github.enma11235.generic.poll.system.model.User;
-import com.github.enma11235.generic.poll.system.security.JwtTokenProvider;
+import com.github.enma11235.generic.poll.system.utils.JwtTokenProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
