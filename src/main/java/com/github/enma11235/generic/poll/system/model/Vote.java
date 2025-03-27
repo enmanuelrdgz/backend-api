@@ -3,6 +3,7 @@ package com.github.enma11235.generic.poll.system.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "votes")
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

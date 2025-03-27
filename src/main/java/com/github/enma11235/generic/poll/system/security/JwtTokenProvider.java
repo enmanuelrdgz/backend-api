@@ -26,7 +26,7 @@ public class JwtTokenProvider {
     // Genera un token JWT
     public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(user.getNickname())
+                .setSubject(user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + tokenExpirationTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
