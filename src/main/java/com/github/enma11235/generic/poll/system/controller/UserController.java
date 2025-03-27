@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping("/edit")
     public ResponseEntity<EditUserResponseBody> editUser(@RequestBody @Valid EditUserRequestBody body) {
         User editedUser = userService.editUser(body.getNickname(), body.getPassword(), body.getImage(), body.getToken());
-        String newToken = authService.signIn(editedUser.getNickname(), editedUser.getPassword());
+        String newToken = authService.signIn(editedUser.getUsername(), editedUser.getPassword());
         EditUserResponseBody responseBody = new EditUserResponseBody(newToken);
         return ResponseEntity.ok(responseBody);
     }

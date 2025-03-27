@@ -1,24 +1,44 @@
 package com.github.enma11235.generic.poll.system.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
 @Entity
 @Table(name = "\"user\"")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nickname;
+    @Column(unique = true, nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String password;
 
-    private String img;
+    @Column(nullable = false)
+    private boolean enabled;
+
+    @Column(nullable = false)
+    private boolean accountNonExpired;
+
+    @Column(nullable = false)
+    private boolean accountNonLocked;
+
+    @Column(nullable = false)
+    private boolean credentialsNonExpired;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
+
 
     @Column(nullable = false)
     private String created_at;
@@ -26,19 +46,7 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Poll> polls;
 
-    //getters and setters
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    // getters and setters
 
     public void setPassword(String password) {
         this.password = password;
@@ -60,19 +68,43 @@ public class User {
         this.id = id;
     }
 
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
     public String getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    @Override
+    public Collection<Role> getAuthorities() {
+        return roles;
     }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
 }
