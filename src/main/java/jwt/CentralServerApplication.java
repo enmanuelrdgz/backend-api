@@ -1,11 +1,11 @@
-package com.github.enma11235.generic.poll.system;
+package jwt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@EnableJpaRepositories(basePackages = "com/github/enma11235/generic/poll/system")
+@EnableJpaRepositories(basePackages = "/jwt")
 public class CentralServerApplication {
 
 	public static void main(String[] args) {

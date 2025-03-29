@@ -1,4 +1,4 @@
-package com.github.enma11235.generic.poll.system;
+package jwt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
