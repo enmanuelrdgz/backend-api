@@ -1,0 +1,7 @@
+package surveys.model.repository;
+
+import surveys.model.entity.Option;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface OptionRepository extends JpaRepository<Option, Long> {
+}

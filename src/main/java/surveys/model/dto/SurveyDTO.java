@@ -1,0 +1,18 @@
+package surveys.model.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class SurveyDTO {
+    private long id;
+    private String title;
+    private List<OptionDTO> optionList;
+ }
