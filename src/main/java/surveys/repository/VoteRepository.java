@@ -1,7 +1,7 @@
-package surveys.model.repository;
+package surveys.repository;
 
-import surveys.model.entity.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;
+import surveys.model.Vote;
 
 public interface VoteRepository extends JpaRepository<Vote, Long> {
 

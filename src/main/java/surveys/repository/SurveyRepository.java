@@ -1,6 +1,6 @@
-package surveys.model.repository;
+package surveys.repository;
 
-import surveys.model.entity.Survey;
+import surveys.model.Survey;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

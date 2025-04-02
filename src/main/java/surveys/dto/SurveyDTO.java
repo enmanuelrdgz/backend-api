@@ -1,4 +1,4 @@
-package surveys.model.dto;
+package surveys.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SurveyDTO {
-    private long id;
+    private Long id;
     private String title;
-    private List<OptionDTO> optionList;
+    private List<OptionDTO> options;
  }

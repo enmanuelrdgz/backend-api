@@ -1,9 +1,11 @@
-package surveys.model.entity;
+package surveys.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
-import surveys.utils.SurveyMapper;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -29,9 +31,5 @@ public class Option {
     @OneToMany(mappedBy = "option", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Vote> votes;
 
-    public Option(String description, Survey survey) {
-        this.description = description;
-        this.survey = survey;
-    }
-
+    private int voteCount;
 }

@@ -1,4 +1,4 @@
-package surveys.model.dto;
+package surveys.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

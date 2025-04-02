@@ -1,4 +1,4 @@
-package surveys.model.dto;
+package surveys.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,4 +13,5 @@ public class VoteDTO {
     private Long id;
     private Long survey_id;
     private Long option_id;
+    private String ipAddress;
 }

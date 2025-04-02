@@ -1,4 +1,4 @@
-package surveys.controller.dto;
+package surveys.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -15,5 +15,4 @@ public class ApiResponseDTO<T> {
     private int status;
     private String message;
     private T data;
-
 }

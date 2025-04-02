@@ -1,7 +1,10 @@
-package surveys.model.entity;
+package surveys.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
@@ -28,5 +31,4 @@ public class Vote {
         this.option = option;
         this.ip_address = ip_address;
     }
-
 }
